@@ -52,11 +52,17 @@ public class Anagrafica extends EntityBase  implements Serializable {
 	@Column(name="TELEFONO")
 	private String telefono;
 	
+	@Column(name="COMUNERESIDENZA")
+	private String comuneResidenza;
+	
 	@Column(name="NOMEGENITORE")
 	private String nomeGenitore;
 	
 	@Column(name="CODICEFISCALE")
 	private String codiceFiscale;
+	
+	@Column(name="CODICEFISCALEGENITORE")
+	private String codiceFiscaleGenitore;
 	
 	@Column(name="IDOPERATORE") 
 	private Integer idOperatore;
@@ -163,6 +169,22 @@ public class Anagrafica extends EntityBase  implements Serializable {
 	
 	public String getOperatoreNominativo() {
 		return operatoreNominativo;
+	}
+
+	public String getComuneResidenza() {
+		return comuneResidenza;
+	}
+
+	public void setComuneResidenza(String comuneResidenza) {
+		this.comuneResidenza = comuneResidenza;
+	}
+
+	public String getCodiceFiscaleGenitore() {
+		return codiceFiscaleGenitore;
+	}
+
+	public void setCodiceFiscaleGenitore(String codiceFiscaleGenitore) {
+		this.codiceFiscaleGenitore = codiceFiscaleGenitore;
 	}
 
 	
