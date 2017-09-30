@@ -10,6 +10,7 @@ import org.hibernate.service.ServiceRegistry;
 
 import it.gspRiva.entity.Anagrafica;
 import it.gspRiva.entity.AnagraficaCorso;
+import it.gspRiva.entity.Calendar;
 import it.gspRiva.entity.Corso;
 import it.gspRiva.entity.EntityBase;
 import it.gspRiva.entity.IscrittoCorso;
@@ -61,6 +62,7 @@ public class HibernateUtils {
             configuration.addAnnotatedClass(Corso.class);
             configuration.addAnnotatedClass(IscrittoCorso.class);
             configuration.addAnnotatedClass(Istruttori.class);
+            configuration.addAnnotatedClass(Calendar.class);
             System.out.println("Hibernate Annotation Configuration loaded");
              
             ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();

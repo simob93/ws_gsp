@@ -46,6 +46,8 @@ public class WsAnagraficaCorso {
             @QueryParam("giovedi") String giovedi,
             @QueryParam("venerdi") String venerdi,
             @QueryParam("sabato") String sabato,
+            @QueryParam("numLezioni") Integer numLezioni,
+            @QueryParam("minLezioni") Integer minLezioni,
             @QueryParam("personalizzato") String personalizzato) throws IOException, MyException {
 		
 		HashMap<String, String> has = new HashMap<String, String>();
@@ -53,7 +55,7 @@ public class WsAnagraficaCorso {
 		if (Controlli.stringCompareTo(lunedi, "T", false) == 0) {
 			has.put("lunedi", lunedi);
 		}
-		if (Controlli.stringCompareTo(lunedi, "T", false) == 0) {
+		if (Controlli.stringCompareTo(martedi, "T", false) == 0) {
 			has.put("martedi", martedi);
 		}
 		if (Controlli.stringCompareTo(mercoledi, "T", false) == 0) {
@@ -70,6 +72,12 @@ public class WsAnagraficaCorso {
 		}
 		if (Controlli.stringCompareTo(personalizzato, "T", false) == 0) {
 			has.put("personalizzato", personalizzato);
+		}
+		if (numLezioni != null) {
+			has.put("numeroLezioni", numLezioni.toString());
+		}
+		if (minLezioni != null) {
+			has.put("minutiLezioni", minLezioni.toString());
 		}
 		return anagraficaCorsoService.search(dal, al, tipologia, has);
 	}

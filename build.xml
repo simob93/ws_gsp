@@ -6,9 +6,6 @@
 			<include name="*.jar"/>
 		</fileset>
 	</path>
-	
-	
-	
 	<target name="init">
 		<mkdir dir="build/classes"/>
 		<mkdir dir="dist" />
@@ -23,12 +20,13 @@
 	<target name="war" depends="compile">
 		<war destfile="D:\tomcat\tomcat9.0.0\webapps\gspRiva.war" webxml="WebContent/WEB-INF/web.xml">
 			<fileset dir="WebContent"/>
-			<lib dir="WebContent/WEB-INF/lib"/>
-			<lib dir="WebContent/WEB-INF/lib/jersey"/>
 			<lib dir="WebContent/WEB-INF/lib/hibernate"/>
+			<lib dir="WebContent/WEB-INF/lib/jersey"/>
+			<lib dir="WebContent/WEB-INF/lib/ireport"/>
 			<classes dir="build/classes"/>
 		</war>
 	</target>
+	
 	
 	<target name="clean">
 		<delete dir="dist" />

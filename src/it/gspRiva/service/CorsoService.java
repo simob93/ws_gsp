@@ -6,15 +6,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.gspRiva.emuns.DbOperation;
+import it.gspRiva.entity.AnagraficaCorso;
 import it.gspRiva.entity.Corso;
 import it.gspRiva.entity.IscrittoCorso;
 import it.gspRiva.exception.MyException;
+import it.gspRiva.manager.AnagraficaCorsoManager;
 import it.gspRiva.manager.CorsoManager;
 import it.gspRiva.manager.IscrittiCorsoManager;
 import it.gspRiva.model.JsonResponse;
 import it.gspRiva.model.ModelIscrittiCorsi;
 import it.gspRiva.model.ModelRegistrazioneCorso;
 import it.gspRiva.model.Partecipanti;
+import it.gspRiva.model.ResponsePrint;
+import it.gspRiva.utils.Controlli;
 import it.gspRiva.utils.PropertiesFile;
 
 public class CorsoService {
@@ -71,9 +75,42 @@ public class CorsoService {
 		List<String> msg = new ArrayList<String>();
 		ModelRegistrazioneCorso data = null;
 		boolean success = true;
+		boolean error = false;
 		try {
-			data = this.getManager().registra(registrazioneCorso);
-			msg.add(PropertiesFile.openPropertie().getProperty("operation.success"));
+			
+			/* controlli  */
+			AnagraficaCorsoManager anagraficaCorsoManager = new AnagraficaCorsoManager();
+			AnagraficaCorso anagraficaCorso = null;
+			List<Partecipanti> listPartecipanti = registrazioneCorso.getPartecipanti();
+			
+			if (registrazioneCorso.getCorso().getTipologia() == 1 && listPartecipanti != null && listPartecipanti.size() > 1) {
+				error = true;
+				msg.add("la tipologia corso <b>individuale</b> prevedere un solo iscritto al corso");
+			} else {
+			
+				for (Partecipanti partecipanti : listPartecipanti) {
+				
+					 error = false;
+					if (Controlli.isEmptyString(partecipanti.getDeletedData())) {
+						anagraficaCorso = anagraficaCorsoManager.getById(partecipanti.getIdAnagraficaCorso()).getData();
+						if (anagraficaCorso != null) {
+							/* se la tipologia del corso è completamente diversa dalla tipologia dell partecipante genero un errore */
+							if (registrazioneCorso.getCorso().getTipologia() != anagraficaCorso.getTipologia()) {
+								msg.add("il partecipante: <b>"+ anagraficaCorso.getNominativo() +"</b> risulta iscritto ad un altra tipologia di corso");
+								error = true;
+								break;
+							}
+						}
+					}
+				}
+			}
+			if (!error) {
+				data = this.getManager().registra(registrazioneCorso);
+				msg.add(PropertiesFile.openPropertie().getProperty("operation.success"));
+			} else {
+				success = false;
+			}
+			
 		} catch (Exception e) {
 			success = false;
 			e.printStackTrace();
@@ -160,5 +197,20 @@ public class CorsoService {
 			msg.add(MessageFormat.format(PropertiesFile.openPropertie().getProperty("operation.error"), e.getMessage()));
 		}
 		return new JsonResponse<Partecipanti>(success, msg, data);
+	}
+
+	public JsonResponse<ResponsePrint> printPresenzeCorsi(Integer idCorso) {
+		List<String> msg = new ArrayList<String>();
+		ResponsePrint data = null;
+		boolean success = true;
+		try {
+			data = this.getManager().printPresenzeCorsi(idCorso);
+			msg.add(PropertiesFile.openPropertie().getProperty("operation.success"));
+		} catch (Exception e) {
+			success = false;
+			e.printStackTrace();
+			msg.add(MessageFormat.format(PropertiesFile.openPropertie().getProperty("operation.error"), e.getMessage()));
+		}
+		return new JsonResponse<ResponsePrint>(success, msg, data);
 	}
 }

@@ -1,10 +1,15 @@
 package it.gspRiva.manager;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
+import javax.persistence.StoredProcedureQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -22,19 +27,24 @@ import it.gspRiva.exception.MyException;
 import it.gspRiva.model.ModelIscrittiCorsi;
 import it.gspRiva.model.ModelRegistrazioneCorso;
 import it.gspRiva.model.Partecipanti;
+import it.gspRiva.model.ResponsePrint;
 import it.gspRiva.utils.Controlli;
 import it.gspRiva.utils.HibernateUtils;
 import it.gspRiva.utils.PropertiesFile;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 public class CorsoManager extends StdManager<Corso> {
 
 	/**
 	 * 
 	 */
-	@Override
-	public boolean checkObjectForInserit(Corso oggetto, List<String> messaggi) throws IOException {
-		return true;
-	}
+	private static final long serialVersionUID = -4622793186358068336L;
+	
 	@Override
 	public boolean checkObjectForUpdate(Corso oggetto, List<String> messaggi) throws IOException {
 		return true;
@@ -45,17 +55,28 @@ public class CorsoManager extends StdManager<Corso> {
 		return true;
 	}
 
-	@Override
-	public boolean checkCampiObbligatori(Corso object, List<String> messaggi) throws IOException {
-		return true;
-	}
 
 	@Override
 	protected Class<Corso> getEntityClass() {
 		return Corso.class;
 	}
 	
-	private static final long serialVersionUID = -4622793186358068336L;
+	@Override
+	public void operationAfterInsert(Corso corso) throws IOException {
+		executeStoreProcedure(corso.getDal(), corso.getAl(), corso.getId(), corso.getLunedi(), corso.getMartedi(), corso.getMercoledi(),corso.getGiovedi(), corso.getVenerdi(), corso.getSabato(), corso.getDescrizione());
+
+	}
+	@Override
+	public void operationAfterUpdate(Corso corso) throws IOException {
+		executeStoreProcedure(corso.getDal(), corso.getAl(), corso.getId(), corso.getLunedi(), corso.getMartedi(), corso.getMercoledi(),corso.getGiovedi(), corso.getVenerdi(), corso.getSabato(), corso.getDescrizione());
+
+	}
+
+	@Override
+	public boolean checkObjectForInsert(Corso oggetto, List<String> messaggi) throws IOException {
+		return true;
+	}
+	
 	
 	public List<Corso> list(boolean escludiAnnullati, boolean escludiConvalidati, String dal, String al) {
 		Session session = null;
@@ -244,6 +265,38 @@ public class CorsoManager extends StdManager<Corso> {
 		}
 		return success;
 	}
+	
+	public void executeStoreProcedure(Date start, Date end, Integer idCorso, String lunedi, String martedi, String mercoledi, String giovedi, String venerdi, String sabato, String descrizione) {
+		Session session = null;
+		Transaction tx = null;
+		try {
+			session = HibernateUtils.getSessionAnnotationFactory().openSession();
+			tx = session.beginTransaction(); 
+			StoredProcedureQuery query = session.createNamedStoredProcedureQuery("filldates");
+			
+			query.setParameter("dateStart", start);
+			query.setParameter("dateEnd", end);
+			query.setParameter("corsoId", idCorso);
+			query.setParameter("lunedi", lunedi);
+			query.setParameter("martedi", martedi);
+			query.setParameter("mercoledi", mercoledi);
+			query.setParameter("giovedi", giovedi);
+			query.setParameter("venerdi", venerdi);
+			query.setParameter("sabato", sabato);
+			query.setParameter("descrizione", descrizione);
+			query.execute();
+			tx.commit();
+			 
+		} catch (Exception e) {
+			tx.rollback();
+			e.printStackTrace();
+			
+		} finally {
+ 			if (session != null) {
+				session.close();
+			}
+		}
+	}
 
 	public ModelRegistrazioneCorso registra(ModelRegistrazioneCorso registrazioneCorso)
 			throws MyException {
@@ -251,38 +304,39 @@ public class CorsoManager extends StdManager<Corso> {
 		List<Partecipanti> listPartecipanti = registrazioneCorso.getPartecipanti();
 		Corso corso = registrazioneCorso.getCorso();
 		IscrittoCorso iscrittiCorso = null;
+		
 		/***************************************************************************
 		 **********	DICHIARAZIONE DEI MANAGER DA UTILIZZARE*************************
 		 ***************************************************************************/
 		AnagraficaCorsoManager anagraficaCorsoManager = new AnagraficaCorsoManager();
 		AnagraficaManager anagraficaManager = new AnagraficaManager();
-		IscrittiCorsoManager iscrittiCorsoManager = new IscrittiCorsoManager();
 		
 		AnagraficaCorso anagraficaCorso = null;
 		Anagrafica anagrafica = null;
 		Session session = null;
 		Transaction tx = null;
+		boolean error = false;
 		try {
 			
 			session = HibernateUtils.getSessionAnnotationFactory().openSession();
 			tx = session.beginTransaction();
-			if (corso.getId() == null) {
-				session.save(corso);
-			} else {
-				session.merge(corso);
-			}
+			Partecipanti tmpPartecipante = null;
 			
+			if (corso.getId() == null) {
+				this.create(corso);
+			} else {
+				this.update(corso);
+			}
 			for (Partecipanti partecipanti : listPartecipanti) {
+				
 				if (Controlli.isEmptyString(partecipanti.getDeletedData())) {
 					anagraficaCorso = anagraficaCorsoManager.getById(partecipanti.getIdAnagraficaCorso()).getData();
 					iscrittiCorso = new IscrittoCorso();
-	
+					
 					if (anagraficaCorso != null) {
-						anagraficaCorso.setInserito("T");
-						anagraficaCorsoManager.update(anagraficaCorso);
 						anagrafica = anagraficaManager.getById(anagraficaCorso.getIdAnagrafica()).getData();
-						
 						if (anagrafica != null) {
+							
 							iscrittiCorso.setAnagraficaCorso(anagraficaCorso);
 							iscrittiCorso.setAnagrafica(anagrafica);
 							iscrittiCorso.setCorso(corso);
@@ -290,15 +344,19 @@ public class CorsoManager extends StdManager<Corso> {
 							iscrittiCorso.setSaldo(partecipanti.getSaldo());
 							iscrittiCorso.setId(partecipanti.getId());
 							session.saveOrUpdate(iscrittiCorso);
+							
+							anagraficaCorso.setInserito("T");
+							session.update(anagraficaCorso);
+							
 						}
 					}
 				}
 			}
-			tx.commit();
 			
+			tx.commit();
+			 
 		} catch (Exception e) {
 			tx.rollback();
-			e.printStackTrace();
 			throw new MyException(e.getMessage());
 		} finally {
  			if (session != null) {
@@ -345,5 +403,64 @@ public class CorsoManager extends StdManager<Corso> {
 			throw new Exception(e.getMessage());
 		} 
 		return partecipante;
+	}
+
+	public ResponsePrint printPresenzeCorsi(Integer idCorso) {
+		Boolean success = true;
+		JasperReport jasperReport = null;
+		JasperPrint jasperPrint = null;
+		File catalinaBase = null;
+		ModelRegistrazioneCorso data = null;
+		List<ModelRegistrazioneCorso> list = new ArrayList<ModelRegistrazioneCorso>();
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		try {
+			
+			data = this.listIscrittiByIdCorso(idCorso);
+			if (data != null) {
+				list.add(data);
+				Integer tipologia = data.getCorso().getTipologia();
+				params.put("tipologia", tipologia);
+				params.put("istruttore",  data.getCorso().getIstruttoreNominativo());
+				
+				String giorniSett = "";
+				
+				if (Controlli.stringCompareTo(data.getCorso().getLunedi(), "T", false) == 0) {
+					giorniSett += "Lun "; 
+				}
+				if (Controlli.stringCompareTo(data.getCorso().getMartedi(), "T", false) == 0) {
+					giorniSett += "Mar "; 
+				}
+				if (Controlli.stringCompareTo(data.getCorso().getMercoledi(), "T", false) == 0) {
+					giorniSett += "Mer "; 
+				}
+				if (Controlli.stringCompareTo(data.getCorso().getGiovedi(), "T", false) == 0) {
+					giorniSett += "Gio "; 
+				}
+				if (Controlli.stringCompareTo(data.getCorso().getVenerdi(), "T", false) == 0) {
+					giorniSett += "Ven "; 
+				}
+				if (Controlli.stringCompareTo(data.getCorso().getSabato(), "T", false) == 0) {
+					giorniSett += "Sab "; 
+				}
+				if (Controlli.stringCompareTo(data.getCorso().getPersonalizzato(), "T", false) == 0) {
+					giorniSett += "Per "; 
+				}
+				
+				params.put("giorni",  giorniSett);
+				
+				catalinaBase = new File( System.getProperty( "catalina.base" ) ).getAbsoluteFile();
+				InputStream is = getClass().getClassLoader().getResourceAsStream("/it/gspRiva/report/stampaPresenzeCorsi.jrxml");
+						
+				
+				jasperReport = JasperCompileManager.compileReport(is);
+				jasperPrint = JasperFillManager.fillReport(jasperReport, params, new JRBeanCollectionDataSource(list));
+				JasperExportManager.exportReportToPdfFile(jasperPrint, catalinaBase + "/webapps/rpt/RP.pdf");
+			}
+			
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

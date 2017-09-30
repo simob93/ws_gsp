@@ -23,6 +23,38 @@ public class IscrittiCorsoManager extends StdManager<IscrittoCorso> {
 	 * 
 	 */
 	private static final long serialVersionUID = 7915547295894968245L;
+	
+	@Override
+	protected Class<IscrittoCorso> getEntityClass() {
+		return IscrittoCorso.class;
+	}
+
+	@Override
+	public boolean checkCampiObbligatoriDelete(IscrittoCorso oggetto, List<String> messaggi) throws IOException {
+		return true;
+	}
+
+	@Override
+	public boolean checkObjectForUpdate(IscrittoCorso oggetto, List<String> messaggi) throws IOException {
+		return true;
+	}
+
+	@Override
+	public boolean checkObjectForInsert(IscrittoCorso oggetto, List<String> messaggi) throws IOException {
+		return true;
+	}
+
+
+	@Override
+	public void operationAfterInsert(IscrittoCorso object) throws IOException {
+		
+	}
+
+
+	@Override
+	public void operationAfterUpdate(IscrittoCorso object) throws IOException {
+		
+	}
 
 	public List<IscrittoCorso> listIscritti() throws MyException {
 		Session session = null;
@@ -104,30 +136,4 @@ public class IscrittiCorsoManager extends StdManager<IscrittoCorso> {
 		}
 		return data;
 	}
-
-	@Override
-	protected Class<IscrittoCorso> getEntityClass() {
-		return IscrittoCorso.class;
-	}
-
-	@Override
-	public boolean checkCampiObbligatoriDelete(IscrittoCorso oggetto, List<String> messaggi) throws IOException {
-		return true;
-	}
-
-	@Override
-	public boolean checkCampiObbligatori(IscrittoCorso object, List<String> messaggi) throws IOException {
-		return true;
-	}
-
-	@Override
-	public boolean checkObjectForInserit(IscrittoCorso oggetto, List<String> messaggi) throws IOException {
-		return true;
-	}
-
-	@Override
-	public boolean checkObjectForUpdate(IscrittoCorso oggetto, List<String> messaggi) throws IOException {
-		return true;
-	}
-	
 }

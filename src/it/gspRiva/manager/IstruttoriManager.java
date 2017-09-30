@@ -19,6 +19,39 @@ public class IstruttoriManager extends StdManager<Istruttori>{
 	
 	private static final long serialVersionUID = 9122875729042324223L;
 
+	@Override
+	protected Class<Istruttori> getEntityClass() {
+		// TODO Auto-generated method stub
+		return Istruttori.class;
+	}
+
+	@Override
+	public boolean checkCampiObbligatoriDelete(Istruttori oggetto, List<String> messaggi) throws IOException {
+		return true;
+	}
+
+
+	@Override
+	public boolean checkObjectForUpdate(Istruttori oggetto, List<String> messaggi) throws IOException {
+		return true;
+	}
+
+	@Override
+	public boolean checkObjectForInsert(Istruttori oggetto, List<String> messaggi) throws IOException {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public void operationAfterInsert(Istruttori object) throws IOException {
+		
+	}
+
+	@Override
+	public void operationAfterUpdate(Istruttori object) throws IOException {
+		
+	}
+	
 	public List<Istruttori> list() throws MyException {
 		Session session = null;
 		Transaction tx = null;
@@ -49,32 +82,6 @@ public class IstruttoriManager extends StdManager<Istruttori>{
 			}
 		}
 		return data;
-	}
-
-	@Override
-	protected Class<Istruttori> getEntityClass() {
-		// TODO Auto-generated method stub
-		return Istruttori.class;
-	}
-
-	@Override
-	public boolean checkCampiObbligatoriDelete(Istruttori oggetto, List<String> messaggi) throws IOException {
-		return true;
-	}
-
-	@Override
-	public boolean checkCampiObbligatori(Istruttori object, List<String> messaggi) throws IOException {
-		return true;
-	}
-
-	@Override
-	public boolean checkObjectForInserit(Istruttori oggetto, List<String> messaggi) throws IOException {
-		return true;
-	}
-
-	@Override
-	public boolean checkObjectForUpdate(Istruttori oggetto, List<String> messaggi) throws IOException {
-		return true;
 	}
 
 }

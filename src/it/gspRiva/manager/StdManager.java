@@ -19,7 +19,7 @@ import it.gspRiva.utils.HibernateUtils;
 import it.gspRiva.utils.PropertiesFile;
 import it.gspRiva.utils.StandardUtils;
 
-public abstract class StdManager<T> implements CrudOperation<T> {
+public abstract class StdManager<T> implements CrudOperation<T>  {
 	
 			
 	/**
@@ -47,7 +47,7 @@ public abstract class StdManager<T> implements CrudOperation<T> {
 	 * @return
 	 * @throws IOException
 	 */
-	public abstract boolean checkObjectForInserit(T oggetto, List<String> messaggi) throws IOException;
+	public abstract boolean checkObjectForInsert(T oggetto, List<String> messaggi) throws IOException;
 	/**
 	 * 
 	 * @param oggetto
@@ -63,7 +63,15 @@ public abstract class StdManager<T> implements CrudOperation<T> {
 	 * @param messaggi
 	 * @return
 	 */
-	public abstract boolean checkCampiObbligatori(T object, List<String> messaggi) throws IOException;
+	public abstract void operationAfterInsert(T object) throws IOException;
+	
+	/**
+	 * 
+	 * @param object
+	 * @param messaggi
+	 * @return
+	 */
+	public abstract void operationAfterUpdate(T object) throws IOException;
 	
 	/**
 	 * 
@@ -137,21 +145,17 @@ public abstract class StdManager<T> implements CrudOperation<T> {
 		List<String> msg = new ArrayList<String>();
 		switch(operation) {
 		case INSERT:
-			result = checkCampiObbligatori(object, msg);
+			result = checkObjectForInsert(object, msg);
 			if (result) {
-				result = checkObjectForInserit(object, msg);
-				if (result) {
-					success = create(object);
-				}
+				success = create(object);
+				operationAfterInsert(object);
 			}
 			break;
 		case UPDATE:
-			result = checkCampiObbligatori(object, msg);
+			result = checkObjectForUpdate(object, msg);
 			if (result) {
-				result = checkObjectForUpdate(object, msg);
-				if (result) {
-					success = update(object);
-				}
+				success = update(object);
+				operationAfterUpdate(object);
 			}
 			break;
 		case DELETE:

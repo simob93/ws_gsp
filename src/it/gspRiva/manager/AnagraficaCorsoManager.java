@@ -20,6 +20,7 @@ import it.gspRiva.entity.Anagrafica;
 import it.gspRiva.entity.AnagraficaCorso;
 import it.gspRiva.exception.MyException;
 import it.gspRiva.model.Iscritti;
+import it.gspRiva.utils.Controlli;
 import it.gspRiva.utils.HibernateUtils;
 import it.gspRiva.utils.PropertiesFile;
 import it.gspRiva.utils.StandardUtils;
@@ -40,55 +41,28 @@ public class AnagraficaCorsoManager extends StdManager<AnagraficaCorso> {
 	public boolean checkCampiObbligatoriDelete(AnagraficaCorso oggetto, List<String> messaggi) throws IOException {
 		return true;
 	}
-	
-
-	@Override
-	public boolean checkObjectForInserit(AnagraficaCorso oggetto, List<String> messaggi) throws IOException {
-		return true;
-	}
 
 	@Override
 	public boolean checkObjectForUpdate(AnagraficaCorso oggetto, List<String> messaggi) throws IOException {
 		return true;
 	}
-
+	
 	@Override
-	public boolean checkCampiObbligatori(AnagraficaCorso object, List<String> messaggi) throws IOException {
-		
-//		Session session = null;
-//		Transaction tx = null;
-//		boolean okInsert = false;
-//		List<AnagraficaCorso> listAnagraficaCorso = null;
-//		try {
-//			
-//			session = HibernateUtils.getSessionAnnotationFactory().openSession();
-//			tx = session.beginTransaction(); 
-//						
-//			CriteriaBuilder builder = session.getCriteriaBuilder();
-//			CriteriaQuery<AnagraficaCorso> query = builder.createQuery(AnagraficaCorso.class);
-//			Root<AnagraficaCorso> anagraficaCorso = query.from(AnagraficaCorso.class);
-//			query.select(anagraficaCorso);
-//			query.where(builder.equal(anagraficaCorso.get("data"), object.getData()));
-//			listAnagraficaCorso = session.createQuery(query).getResultList();
-//			okInsert = listAnagraficaCorso.size() == 0;
-//			
-//			if (!okInsert) {
-//				messaggi.add(new PropertiesFile().getPropValues("data.invalid"));
-//			}
-//			
-//			tx.commit();
-//			
-//		} catch (Exception e) {
-//			tx.rollback();
-//			e.printStackTrace();
-//			
-//		} finally {
-// 			if (session != null) {
-//				session.close();
-//			}
-//		}
+	public boolean checkObjectForInsert(AnagraficaCorso oggetto, List<String> messaggi) throws IOException {
 		return true;
 	}
+
+	@Override
+	public void operationAfterInsert(AnagraficaCorso object) throws IOException {
+		
+	}
+
+	@Override
+	public void operationAfterUpdate(AnagraficaCorso object) throws IOException {
+		
+	}
+
+
 
 	public List<AnagraficaCorso> listByIdAnagrafica(Integer id) {
 		Session session = null;
@@ -130,12 +104,9 @@ public class AnagraficaCorsoManager extends StdManager<AnagraficaCorso> {
 		Transaction tx = null;
 		List<Iscritti> listaIscritti = null;
 		
-		if (dal == null) {
+		if (dal == null || Controlli.isEmptyString(dal)) {
 			throw new MyException(PropertiesFile.openPropertie().getProperty("dal.invalid"));
-		}
-		if (al == null) {
-			throw new MyException(PropertiesFile.openPropertie().getProperty("dal.invalid"));
-		}
+		} 
 		if (tipologia == null) {
 			throw new MyException(PropertiesFile.openPropertie().getProperty("tipologia.invalid"));
 		}
@@ -143,19 +114,25 @@ public class AnagraficaCorsoManager extends StdManager<AnagraficaCorso> {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		
 		try {
-			Date dataAl = sdf.parse(al);
 			Date dataDal = sdf.parse(dal);
+			Date dataAl = null;
 			session = HibernateUtils.getSessionAnnotationFactory().openSession();
 			tx = session.beginTransaction(); 
 			/*
 			 *  escludo le iscrizioni annullate
 			 */
 			String hql = "FROM AnagraficaCorso As ac INNER JOIN Anagrafica AS an ON ac.idAnagrafica = an.id WHERE "
-					+ "ac.data >= :dal "
-					+ "AND ac.data <= :al "
-					+ "AND ac.deletedData is null "
-					+ "AND (ac.inserito is null OR ac.inserito='F') ";
+					+ "ac.deletedData is null "
+					+ "AND (ac.inserito is null OR ac.inserito='F') "
+					+ "AND ac.data >= :dal ";
+					
 					//+ "ORDER BY ac.data DESC";
+			
+			
+			if (!Controlli.isEmptyString(al)) {
+				dataAl = sdf.parse(al);
+				hql += "AND ac.data <= :al ";
+			} 
 			
 			if (tipologia != null) {
 				hql += "AND ac.tipologia=" + tipologia + " ";
@@ -167,7 +144,7 @@ public class AnagraficaCorsoManager extends StdManager<AnagraficaCorso> {
 			
 				for(Entry<String, String> entry : has.entrySet()) {
 					value = "'" + entry.getValue() + "'";
-					hql += "AND "+ entry.getKey() + "=" + value;
+					hql += "AND ac."+ entry.getKey() + "=" + value;
 				}
 			}
 			
@@ -175,7 +152,10 @@ public class AnagraficaCorsoManager extends StdManager<AnagraficaCorso> {
 			
 			Query query = session.createQuery(hql);
 			query.setParameter("dal", dataDal);
-			query.setParameter("al", dataAl);
+			if (dataAl != null) {
+				query.setParameter("al", dataAl);
+			} 
+			
 			
 			listaIscritti = new ArrayList<Iscritti>();
 			List result = query.list();
@@ -193,6 +173,26 @@ public class AnagraficaCorsoManager extends StdManager<AnagraficaCorso> {
 							modelIscritti.setNominativo(ac.getNominativo());
 							modelIscritti.setAssicurazione(ac.getAssicurazione() != null && ac.getAssicurazione().compareTo("T") == 0);
 							modelIscritti.setIdAnagraficaCorso(ac.getId());
+							modelIscritti.setLunedi(ac.getLunedi());
+							modelIscritti.setMartedi(ac.getMartedi());
+							modelIscritti.setMercoledi(ac.getMercoledi());
+							modelIscritti.setGiovedi(ac.getGiovedi());
+							modelIscritti.setVenerdi(ac.getVenerdi());
+							modelIscritti.setSabato(ac.getSabato());
+							modelIscritti.setPersonalizzato(ac.getPersonalizzato());
+							modelIscritti.setMinutiLezioni(ac.getMinutiLezioni());
+							modelIscritti.setNumeroLezioni(ac.getNumeroLezioni());
+							
+							modelIscritti.setTipologia(ac.getTipologia());
+							modelIscritti.setTipologia(ac.getTipologia());
+							modelIscritti.setTipologia(ac.getTipologia());
+							modelIscritti.setTipologia(ac.getTipologia());
+							modelIscritti.setTipologia(ac.getTipologia());
+							modelIscritti.setTipologia(ac.getTipologia());
+							modelIscritti.setTipologia(ac.getTipologia());
+							modelIscritti.setTipologia(ac.getTipologia());
+							modelIscritti.setTipologia(ac.getTipologia());
+							
 							
 						}
 						if (res instanceof Anagrafica) {
@@ -219,5 +219,4 @@ public class AnagraficaCorsoManager extends StdManager<AnagraficaCorso> {
 		}
 		return listaIscritti;
 	}
-
 }

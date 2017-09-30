@@ -1,13 +1,10 @@
 package it.gspRiva.manager;
 
 import java.io.IOException;
-import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.hibernate.Session;
@@ -16,7 +13,6 @@ import org.hibernate.Transaction;
 import it.gspRiva.entity.Anagrafica;
 import it.gspRiva.utils.Controlli;
 import it.gspRiva.utils.HibernateUtils;
-import it.gspRiva.utils.PropertiesFile;
 
 public class AnagraficaManager extends StdManager<Anagrafica> {
 
@@ -29,20 +25,29 @@ public class AnagraficaManager extends StdManager<Anagrafica> {
 	protected Class<Anagrafica> getEntityClass() {
 		return Anagrafica.class;
 	}
+	
+
+	@Override
+	public boolean checkObjectForInsert(Anagrafica oggetto, List<String> messaggi) throws IOException {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public void operationAfterInsert(Anagrafica object) throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void operationAfterUpdate(Anagrafica object) throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
 
 	@Override
 	public boolean checkCampiObbligatoriDelete(Anagrafica oggetto, List<String> messaggi) throws IOException {
 		return true;
-	}
-
-	@Override
-	public boolean checkCampiObbligatori(Anagrafica object, List<String> messaggi) throws IOException {
-		return true;
-	}
-
-	@Override
-	public boolean checkObjectForInserit(Anagrafica oggetto, List<String> messaggi) throws IOException {
-		return controllaRecordDoppi(oggetto, messaggi);
 	}
 
 	@Override
@@ -133,5 +138,4 @@ public class AnagraficaManager extends StdManager<Anagrafica> {
 		}
 		return listAnagrafica;
 	}
-
 }

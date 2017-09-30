@@ -35,6 +35,7 @@
         <mapping class="it.gspRiva.entity.IscrittoCorso" />
         <mapping class="it.gspRiva.entity.Corso" />
         <mapping class="it.gspRiva.entity.Istruttori" />
+        <mapping class="it.gspRiva.entity.Calendar" />
 
        
 

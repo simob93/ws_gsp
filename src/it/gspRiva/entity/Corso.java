@@ -8,6 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedStoredProcedureQueries;
+import javax.persistence.NamedStoredProcedureQuery;
+import javax.persistence.StoredProcedureParameter;
+import javax.persistence.ParameterMode;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -17,6 +21,26 @@ import org.hibernate.annotations.Type;
 @XmlRootElement
 @Entity
 @Table(name="corso")
+@NamedStoredProcedureQueries(
+		{
+			@NamedStoredProcedureQuery(
+					name = "filldates", 
+					procedureName = "filldates", 
+					parameters = {
+							@StoredProcedureParameter(name = "dateStart", mode = ParameterMode.IN, type = Date.class),
+							@StoredProcedureParameter(name = "dateEnd", mode = ParameterMode.IN, type = Date.class),
+							@StoredProcedureParameter(name = "corsoId", mode = ParameterMode.IN, type = Integer.class),
+							@StoredProcedureParameter(name = "lunedi", mode = ParameterMode.IN, type = String.class),
+							@StoredProcedureParameter(name = "martedi", mode = ParameterMode.IN, type = String.class),
+							@StoredProcedureParameter(name = "mercoledi", mode = ParameterMode.IN, type = String.class),
+							@StoredProcedureParameter(name = "giovedi", mode = ParameterMode.IN, type = String.class),
+							@StoredProcedureParameter(name = "venerdi", mode = ParameterMode.IN, type = String.class),
+							@StoredProcedureParameter(name = "sabato", mode = ParameterMode.IN, type = String.class),
+							@StoredProcedureParameter(name = "descrizione", mode = ParameterMode.IN, type = String.class)
+							
+					}
+			)
+})
 public class Corso extends EntityBase implements Serializable {
 	/**
 	 * 

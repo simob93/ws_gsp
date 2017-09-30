@@ -47,7 +47,7 @@ public class AnagraficaCorso extends EntityBase implements Serializable {
 	private Integer numeroLezioni;
 	
 	@Column(name="MINLEZIONI")
-	private String minutiLezioni;
+	private Integer minutiLezioni;
 	
 	@Column(name="LUNEDI")
 	private String lunedi;
@@ -136,11 +136,11 @@ public class AnagraficaCorso extends EntityBase implements Serializable {
 		this.numeroLezioni = numeroLezioni;
 	}
 
-	public String getMinutiLezioni() {
+	public Integer getMinutiLezioni() {
 		return minutiLezioni;
 	}
 
-	public void setMinutiLezioni(String minutiLezioni) {
+	public void setMinutiLezioni(Integer minutiLezioni) {
 		this.minutiLezioni = minutiLezioni;
 	}
 

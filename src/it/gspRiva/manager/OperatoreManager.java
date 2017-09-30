@@ -31,19 +31,25 @@ public class OperatoreManager extends StdManager<Operatore> {
 		return true;
 	}
 
-	@Override
-	public boolean checkCampiObbligatori(Operatore object, List<String> messaggi) throws IOException {
-		return true;
-	}
-	
-	@Override
-	public boolean checkObjectForInserit(Operatore oggetto, List<String> messaggi) throws IOException {
-		return true;
-	}
 
 	@Override
 	public boolean checkObjectForUpdate(Operatore oggetto, List<String> messaggi) throws IOException {
 		return true;
+	}
+	
+	@Override
+	public boolean checkObjectForInsert(Operatore oggetto, List<String> messaggi) throws IOException {
+		return true;
+	}
+
+	@Override
+	public void operationAfterInsert(Operatore object) throws IOException {
+		
+	}
+
+	@Override
+	public void operationAfterUpdate(Operatore object) throws IOException {
+		
 	}
 
 	public Operatore login(String username, String password) {

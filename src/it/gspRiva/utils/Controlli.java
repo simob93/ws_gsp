@@ -8,7 +8,11 @@ public class Controlli {
 	}
 	
 	public static  <T> boolean isEmptyString (String str) {
-		return str == null || str.compareTo("") == 0;
+		boolean vuota = true;
+		if (str != null) {
+			vuota =  str.compareTo("") == 0;
+		}
+		return vuota;
 	}
 	
 	public static int stringCompareTo(String str1, String str2, boolean ignoreCase) {

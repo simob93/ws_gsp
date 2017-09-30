@@ -18,6 +18,7 @@ import it.gspRiva.model.JsonResponse;
 import it.gspRiva.model.ModelIscrittiCorsi;
 import it.gspRiva.model.ModelRegistrazioneCorso;
 import it.gspRiva.model.Partecipanti;
+import it.gspRiva.model.ResponsePrint;
 import it.gspRiva.service.CorsoService;
 
 @Path("/corso")
@@ -150,6 +151,15 @@ public class WsCorso {
 	public JsonResponse<Boolean> convalida(
 			@QueryParam("id") Integer id) throws IOException{
 		return this.getService().convalida(id);
+			
+	}
+	
+	@GET
+	@Path("/report/presenzeCorsi")
+	@Produces(MediaType.APPLICATION_JSON)
+	public JsonResponse<ResponsePrint> printPresenzeCorsi(
+			@QueryParam("idCorso") Integer idCorso) throws IOException{
+		return this.getService().printPresenzeCorsi(idCorso);
 			
 	}
 }
