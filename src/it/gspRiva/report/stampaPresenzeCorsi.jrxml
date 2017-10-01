@@ -9,45 +9,83 @@
 	<parameter name="tipologia" class="java.lang.Integer" isForPrompting="false"/>
 	<parameter name="istruttore" class="java.lang.String"/>
 	<parameter name="giorni" class="java.lang.String"/>
-	<parameter name="minuti" class="java.lang.String"/>
+	<parameter name="minuti" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="orario" class="java.lang.String"/>
+	<parameter name="periodo" class="java.lang.String"/>
+	<parameter name="numeroLezioni" class="java.lang.Integer"/>
+	<parameter name="numeroPartecipanti" class="java.lang.Integer"/>
 	<field name="partecipanti" class="java.util.List"/>
 	<title>
 		<band height="50">
 			<staticText>
 				<reportElement x="0" y="15" width="555" height="20" uuid="6edb7415-cfab-451a-9a75-10ddea1a7e0e"/>
 				<textElement textAlignment="Center"/>
-				<text><![CDATA[SCHEDA CORSO PRESENZE E VALUTAZIONE FINALE ]]></text>
+				<text><![CDATA[SCHEDA CORSO PRESENZE]]></text>
 			</staticText>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="51">
+		<band height="57">
 			<rectangle radius="10">
-				<reportElement x="0" y="0" width="555" height="51" uuid="91649bc8-4600-4040-95c3-54cf193107f0"/>
+				<reportElement x="0" y="0" width="555" height="57" uuid="91649bc8-4600-4040-95c3-54cf193107f0"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="10" y="15" width="35" height="20" uuid="3aff3e65-7f7d-4948-a6ac-1327914af4db"/>
+				<reportElement x="10" y="23" width="45" height="20" uuid="3aff3e65-7f7d-4948-a6ac-1327914af4db"/>
 				<text><![CDATA[Giorni:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="473" y="15" width="35" height="20" uuid="1f3b811b-0b17-4cf0-9e07-4289bbaca9bd"/>
+				<reportElement x="473" y="23" width="35" height="20" uuid="1f3b811b-0b17-4cf0-9e07-4289bbaca9bd"/>
+				<textElement textAlignment="Right"/>
 				<text><![CDATA[Minuti:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="134" y="15" width="34" height="20" uuid="b2ca7c0f-c9aa-452f-9e59-b077b244145d"/>
+				<reportElement x="134" y="23" width="34" height="20" uuid="b2ca7c0f-c9aa-452f-9e59-b077b244145d"/>
 				<text><![CDATA[Orario:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="277" y="15" width="46" height="20" uuid="597421d5-dadc-4948-bee2-9145e26e1eb9"/>
+				<reportElement x="277" y="23" width="46" height="20" uuid="597421d5-dadc-4948-bee2-9145e26e1eb9"/>
 				<text><![CDATA[Istruttore:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="45" y="15" width="78" height="20" uuid="c91271d9-18ef-4437-847e-a8b99973970d"/>
+				<reportElement x="55" y="23" width="68" height="20" uuid="c91271d9-18ef-4437-847e-a8b99973970d"/>
 				<textFieldExpression><![CDATA[$P{giorni}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="323" y="15" width="150" height="20" uuid="c6f32daf-bc76-4e33-ad39-a7c8b96abd18"/>
+				<reportElement x="323" y="23" width="150" height="20" uuid="c6f32daf-bc76-4e33-ad39-a7c8b96abd18"/>
 				<textFieldExpression><![CDATA[$P{istruttore}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="508" y="23" width="47" height="20" uuid="c47c3562-50b0-416e-9b81-6f82304fc179"/>
+				<textFieldExpression><![CDATA[$P{minuti}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="168" y="23" width="109" height="20" uuid="7fcc46f2-fa1b-4456-9aab-cc11fee5f247"/>
+				<textFieldExpression><![CDATA[$P{orario}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="10" y="3" width="45" height="20" uuid="3daace62-662f-46fb-ae22-d682fcf395c3"/>
+				<text><![CDATA[Periodo:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="55" y="3" width="222" height="20" uuid="08e2c6e4-cd9a-4839-9f4e-a68679dbd111"/>
+				<textFieldExpression><![CDATA[$P{periodo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="277" y="3" width="77" height="20" uuid="37d95a53-78c4-4c52-b8e1-021e6b0bc4b3"/>
+				<text><![CDATA[Nr ° partecipanti:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="508" y="3" width="47" height="20" uuid="e159e0d4-9cff-43a8-b32c-b7c2e96a86ce"/>
+				<textFieldExpression><![CDATA[$P{numeroLezioni}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="455" y="3" width="53" height="20" uuid="e9c1790f-ab07-4b20-8427-ba8a76c59fd9"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Nr ° lezioni:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="355" y="3" width="100" height="20" uuid="fa52a5f8-02b0-49c1-a4df-61eacaace0bf"/>
+				<textFieldExpression><![CDATA[$P{numeroPartecipanti}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>

@@ -1,9 +1,19 @@
 package it.gspRiva.utils;
 
+import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 public class StandardUtils {
 	
@@ -42,5 +52,20 @@ public class StandardUtils {
 		
 	}
 	
-	
+	public static <T> void doPrint(HashMap<String, Object> params, String fileName, List<T> dataSource) {
+		JasperReport jasperReport = null;
+		JasperPrint jasperPrint = null;
+		File catalinaBase = null;
+		try {
+			
+			catalinaBase = new File( System.getProperty( "catalina.base" ) ).getAbsoluteFile();
+			InputStream is = PropertiesFile.class.getClassLoader().getResourceAsStream("/it/gspRiva/report/"+ fileName +".jrxml");
+			jasperReport = JasperCompileManager.compileReport(is);
+			jasperPrint = JasperFillManager.fillReport(jasperReport, params, new JRBeanCollectionDataSource(dataSource));
+			JasperExportManager.exportReportToPdfFile(jasperPrint, catalinaBase + "/webapps/rpt/RP.pdf");
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

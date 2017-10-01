@@ -15,6 +15,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.eclipse.jdt.internal.compiler.env.ISourceImport;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -24,13 +25,17 @@ import it.gspRiva.entity.AnagraficaCorso;
 import it.gspRiva.entity.Corso;
 import it.gspRiva.entity.IscrittoCorso;
 import it.gspRiva.exception.MyException;
+import it.gspRiva.model.Iscritti;
+import it.gspRiva.model.IscrittiPrint;
 import it.gspRiva.model.ModelIscrittiCorsi;
 import it.gspRiva.model.ModelRegistrazioneCorso;
 import it.gspRiva.model.Partecipanti;
+import it.gspRiva.model.PrintSchedaCorso;
 import it.gspRiva.model.ResponsePrint;
 import it.gspRiva.utils.Controlli;
 import it.gspRiva.utils.HibernateUtils;
 import it.gspRiva.utils.PropertiesFile;
+import it.gspRiva.utils.StandardUtils;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -404,63 +409,109 @@ public class CorsoManager extends StdManager<Corso> {
 		} 
 		return partecipante;
 	}
+	
+	public ResponsePrint printCorso(Integer idCorso) {
+		
+		IscrittiPrint iscritto = null;
+		List<IscrittoCorso> list = new ArrayList<IscrittoCorso>();
+		List<IscrittiPrint> listIscritti = new ArrayList<IscrittiPrint>();
+		List<PrintSchedaCorso> listScedaCorso = new ArrayList<PrintSchedaCorso>();
+		PrintSchedaCorso schedaCorso = new PrintSchedaCorso();
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		double totaleCorso = 0;
+		try {
+			
+			list = new IscrittiCorsoManager().listIscrittiByIdCorso(idCorso, false);
+			if (list.size() > 0) {
+				
+				for(IscrittoCorso iscritti : list) {
+					
+					Anagrafica anagrafica = iscritti.getAnagrafica();
+					AnagraficaCorso anagraficaCorso = iscritti.getAnagraficaCorso();
+					totaleCorso += iscritti.getQuota();
+					boolean certificato = Controlli.stringCompareTo(anagraficaCorso.getCertificatoMedico(), "T", false) == 0;
+					boolean assicurazione = Controlli.stringCompareTo(anagraficaCorso.getAssicurazione(), "T", false) == 0;
+					boolean saldo = Controlli.stringCompareTo(iscritti.getSaldo(), "T", false) == 0;
+					boolean acconto = Controlli.stringCompareTo(anagraficaCorso.getAcconto(), "T", false) == 0;
+					
+					iscritto = new IscrittiPrint(anagrafica.getNome() + " " + anagrafica.getCognome(), anagraficaCorso.getData(), anagrafica.getDataNascita(), certificato, assicurazione, saldo ,acconto, iscritti.getQuota());
+					listIscritti.add(iscritto);
+				}
+				
+				params = createDettaglioCorso(params, list.get(0).getCorso());
+				params.put("numeroPartecipanti",  listIscritti.size());
+				params.put("totaleCorso", (float) totaleCorso);
+				schedaCorso.setPartecipanti(listIscritti);
+				listScedaCorso.add(schedaCorso);
+				
+				StandardUtils.doPrint(params, "stampaCorso", listScedaCorso);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
-	public ResponsePrint printPresenzeCorsi(Integer idCorso) {
-		Boolean success = true;
-		JasperReport jasperReport = null;
-		JasperPrint jasperPrint = null;
-		File catalinaBase = null;
+	public ResponsePrint printPresenzeCorso(Integer idCorso) {
+
 		ModelRegistrazioneCorso data = null;
 		List<ModelRegistrazioneCorso> list = new ArrayList<ModelRegistrazioneCorso>();
 		HashMap<String, Object> params = new HashMap<String, Object>();
+
 		try {
 			
 			data = this.listIscrittiByIdCorso(idCorso);
 			if (data != null) {
 				list.add(data);
-				Integer tipologia = data.getCorso().getTipologia();
-				params.put("tipologia", tipologia);
-				params.put("istruttore",  data.getCorso().getIstruttoreNominativo());
+				Corso cors = data.getCorso();
 				
-				String giorniSett = "";
-				
-				if (Controlli.stringCompareTo(data.getCorso().getLunedi(), "T", false) == 0) {
-					giorniSett += "Lun "; 
-				}
-				if (Controlli.stringCompareTo(data.getCorso().getMartedi(), "T", false) == 0) {
-					giorniSett += "Mar "; 
-				}
-				if (Controlli.stringCompareTo(data.getCorso().getMercoledi(), "T", false) == 0) {
-					giorniSett += "Mer "; 
-				}
-				if (Controlli.stringCompareTo(data.getCorso().getGiovedi(), "T", false) == 0) {
-					giorniSett += "Gio "; 
-				}
-				if (Controlli.stringCompareTo(data.getCorso().getVenerdi(), "T", false) == 0) {
-					giorniSett += "Ven "; 
-				}
-				if (Controlli.stringCompareTo(data.getCorso().getSabato(), "T", false) == 0) {
-					giorniSett += "Sab "; 
-				}
-				if (Controlli.stringCompareTo(data.getCorso().getPersonalizzato(), "T", false) == 0) {
-					giorniSett += "Per "; 
-				}
-				
-				params.put("giorni",  giorniSett);
-				
-				catalinaBase = new File( System.getProperty( "catalina.base" ) ).getAbsoluteFile();
-				InputStream is = getClass().getClassLoader().getResourceAsStream("/it/gspRiva/report/stampaPresenzeCorsi.jrxml");
-						
-				
-				jasperReport = JasperCompileManager.compileReport(is);
-				jasperPrint = JasperFillManager.fillReport(jasperReport, params, new JRBeanCollectionDataSource(list));
-				JasperExportManager.exportReportToPdfFile(jasperPrint, catalinaBase + "/webapps/rpt/RP.pdf");
+				params = createDettaglioCorso(params, cors);
+				params.put("numeroPartecipanti",  data.getPartecipanti().size());
+				StandardUtils.doPrint(params, "stampaPresenzeCorsi", list);
 			}
-			
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	private HashMap<String, Object> createDettaglioCorso(HashMap<String, Object> params, Corso corso) {
+		params.put("tipologia", corso.getTipologia());
+		params.put("istruttore",  corso.getIstruttoreNominativo());
+		
+		String giorniSett = "";
+		
+		if (Controlli.stringCompareTo(corso.getLunedi(), "T", false) == 0) {
+			giorniSett += "Lun "; 
+		}
+		if (Controlli.stringCompareTo(corso.getMartedi(), "T", false) == 0) {
+			giorniSett += "Mar "; 
+		}
+		if (Controlli.stringCompareTo(corso.getMercoledi(), "T", false) == 0) {
+			giorniSett += "Mer "; 
+		}
+		if (Controlli.stringCompareTo(corso.getGiovedi(), "T", false) == 0) {
+			giorniSett += "Gio "; 
+		}
+		if (Controlli.stringCompareTo(corso.getVenerdi(), "T", false) == 0) {
+			giorniSett += "Ven "; 
+		}
+		if (Controlli.stringCompareTo(corso.getSabato(), "T", false) == 0) {
+			giorniSett += "Sab "; 
+		}
+		if (Controlli.stringCompareTo(corso.getPersonalizzato(), "T", false) == 0) {
+			giorniSett += "Per "; 
+		}
+		
+		params.put("giorni",  giorniSett);
+		params.put("orario",  corso.getOraAl() + " - " + corso.getOraDal());
+		params.put("minuti",  corso.getMinutiLezioni());
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		
+		params.put("periodo",  sdf.format(corso.getDal()) + " - " + sdf.format(corso.getAl()));
+		params.put("numeroLezioni",  corso.getNumeroLezioni());
+		
+		return params;
 	}
 }

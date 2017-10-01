@@ -52,79 +52,103 @@
 	</style>
 	<subDataset name="New Dataset 1" uuid="51192706-b6d5-42aa-89c2-5529df96c7eb"/>
 	<field name="nominativo" class="java.lang.String"/>
+	<title>
+		<band height="30">
+			<rectangle>
+				<reportElement x="200" y="0" width="355" height="29" backcolor="#FFFFFF" uuid="a398f058-1d3d-4238-9a10-21a053cdedf3"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="0" width="200" height="29" uuid="19f0c971-19d9-43b8-b6de-18ad2d90a62b"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="5" width="200" height="20" uuid="9609eb32-ee5c-4462-95db-a3fb1b40e66b"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nominativo partecipante]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="5" width="355" height="20" uuid="0a49413e-9a3a-4ce8-b741-e2a38c048c5a"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Presenze]]></text>
+			</staticText>
+		</band>
+	</title>
 	<detail>
 		<band height="29" splitType="Stretch">
 			<rectangle>
 				<reportElement x="200" y="0" width="355" height="29" uuid="57a70488-5882-45e2-b441-e5662293388e"/>
 			</rectangle>
 			<rectangle radius="5">
-				<reportElement x="239" y="9" width="13" height="13" uuid="6ffbbd61-e220-4d79-af8e-034d092ffea6"/>
+				<reportElement x="239" y="8" width="13" height="13" uuid="6ffbbd61-e220-4d79-af8e-034d092ffea6"/>
 			</rectangle>
 			<rectangle radius="5">
-				<reportElement x="272" y="9" width="12" height="12" uuid="4e36bb41-ffb2-4034-905f-55eaaecc953a"/>
+				<reportElement x="272" y="8" width="12" height="12" uuid="4e36bb41-ffb2-4034-905f-55eaaecc953a"/>
 			</rectangle>
 			<rectangle radius="5">
-				<reportElement x="305" y="9" width="12" height="12" uuid="1755dabf-28f5-413e-8983-ac4050b124c2"/>
+				<reportElement x="305" y="8" width="12" height="12" uuid="1755dabf-28f5-413e-8983-ac4050b124c2"/>
 			</rectangle>
 			<rectangle radius="5">
-				<reportElement x="338" y="9" width="12" height="12" uuid="217350e9-df2f-4789-b098-e299102a3c53"/>
+				<reportElement x="338" y="8" width="12" height="12" uuid="217350e9-df2f-4789-b098-e299102a3c53"/>
 			</rectangle>
 			<rectangle radius="5">
-				<reportElement x="371" y="9" width="12" height="12" uuid="60f547d4-06c8-46fd-967e-b37237d03aef"/>
+				<reportElement x="371" y="8" width="12" height="12" uuid="60f547d4-06c8-46fd-967e-b37237d03aef"/>
 			</rectangle>
 			<rectangle radius="5">
-				<reportElement x="470" y="9" width="12" height="12" uuid="124b7370-b687-4f32-938a-1168d17187b7"/>
+				<reportElement x="470" y="8" width="12" height="12" uuid="124b7370-b687-4f32-938a-1168d17187b7"/>
 			</rectangle>
 			<rectangle radius="5">
-				<reportElement x="404" y="9" width="12" height="12" uuid="67e402ec-0142-473a-b89c-f90f1f1a048d"/>
+				<reportElement x="404" y="8" width="12" height="12" uuid="67e402ec-0142-473a-b89c-f90f1f1a048d"/>
 			</rectangle>
 			<rectangle radius="5">
-				<reportElement x="437" y="9" width="12" height="12" uuid="a97791ae-55a5-4130-ba5e-785cc1d51ea5"/>
+				<reportElement x="437" y="8" width="12" height="12" uuid="a97791ae-55a5-4130-ba5e-785cc1d51ea5"/>
 			</rectangle>
 			<rectangle radius="5">
-				<reportElement x="503" y="9" width="12" height="12" uuid="c620baef-4a8a-467d-8511-6e8c983d6152"/>
+				<reportElement x="503" y="8" width="12" height="12" uuid="c620baef-4a8a-467d-8511-6e8c983d6152"/>
 			</rectangle>
 			<rectangle radius="5">
-				<reportElement x="536" y="9" width="12" height="12" uuid="c30289bc-6ceb-4971-8282-55aad4f38b42"/>
+				<reportElement x="536" y="8" width="12" height="12" uuid="c30289bc-6ceb-4971-8282-55aad4f38b42"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="226" y="9" width="13" height="13" uuid="115c9c0e-77dd-425d-81a7-789a80dd1588"/>
+				<reportElement x="226" y="8" width="13" height="13" uuid="115c9c0e-77dd-425d-81a7-789a80dd1588"/>
 				<text><![CDATA[1]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="292" y="9" width="13" height="13" uuid="51395b59-9144-4ba7-89dd-f53f28cdd967"/>
+				<reportElement x="292" y="8" width="13" height="13" uuid="51395b59-9144-4ba7-89dd-f53f28cdd967"/>
 				<text><![CDATA[3]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="259" y="9" width="13" height="13" uuid="2c636554-0a22-49e3-9768-e66a253de296"/>
+				<reportElement x="259" y="8" width="13" height="13" uuid="2c636554-0a22-49e3-9768-e66a253de296"/>
 				<text><![CDATA[2]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="325" y="9" width="13" height="13" uuid="d0b42135-a3ae-4afd-8058-45ac2ecbc184"/>
+				<reportElement x="325" y="8" width="13" height="13" uuid="d0b42135-a3ae-4afd-8058-45ac2ecbc184"/>
 				<text><![CDATA[4]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="358" y="9" width="13" height="13" uuid="8e19a8ca-2762-4b00-b3ab-bc0d28e715de"/>
+				<reportElement x="358" y="8" width="13" height="13" uuid="8e19a8ca-2762-4b00-b3ab-bc0d28e715de"/>
 				<text><![CDATA[5]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="391" y="9" width="13" height="13" uuid="dc5060e2-7efe-4c62-b749-3269b6983845"/>
+				<reportElement x="391" y="8" width="13" height="13" uuid="dc5060e2-7efe-4c62-b749-3269b6983845"/>
 				<text><![CDATA[6]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="424" y="9" width="13" height="13" uuid="b52f0514-0124-400b-a518-6a141bd14e23"/>
+				<reportElement x="424" y="8" width="13" height="13" uuid="b52f0514-0124-400b-a518-6a141bd14e23"/>
 				<text><![CDATA[7]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="457" y="9" width="13" height="13" uuid="9650205a-8a82-41c6-a315-df7d1c5bd885"/>
+				<reportElement x="457" y="8" width="13" height="13" uuid="9650205a-8a82-41c6-a315-df7d1c5bd885"/>
 				<text><![CDATA[8]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="490" y="9" width="13" height="13" uuid="28923cf1-bcc3-447f-bcd8-4e5a1b58aec5"/>
+				<reportElement x="490" y="8" width="13" height="13" uuid="28923cf1-bcc3-447f-bcd8-4e5a1b58aec5"/>
 				<text><![CDATA[9]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="523" y="9" width="13" height="13" uuid="d3ce0f7b-454e-49a9-a9cb-4563789a9450"/>
+				<reportElement x="523" y="8" width="13" height="13" uuid="d3ce0f7b-454e-49a9-a9cb-4563789a9450"/>
 				<text><![CDATA[10]]></text>
 			</staticText>
 			<rectangle>
@@ -132,6 +156,7 @@
 			</rectangle>
 			<textField>
 				<reportElement x="5" y="4" width="195" height="20" uuid="335214bd-ddcc-4179-85ca-4d7271253962"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{nominativo}]]></textFieldExpression>
 			</textField>
 		</band>

@@ -159,7 +159,16 @@ public class WsCorso {
 	@Produces(MediaType.APPLICATION_JSON)
 	public JsonResponse<ResponsePrint> printPresenzeCorsi(
 			@QueryParam("idCorso") Integer idCorso) throws IOException{
-		return this.getService().printPresenzeCorsi(idCorso);
+		return this.getService().printPresenzeCorso(idCorso);
+			
+	}
+	
+	@GET
+	@Path("/report/dettaglioCorso")
+	@Produces(MediaType.APPLICATION_JSON)
+	public JsonResponse<ResponsePrint> printCorso(
+			@QueryParam("idCorso") Integer idCorso) throws IOException{
+		return this.getService().printCorso(idCorso);
 			
 	}
 }

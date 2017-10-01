@@ -199,12 +199,28 @@ public class CorsoService {
 		return new JsonResponse<Partecipanti>(success, msg, data);
 	}
 
-	public JsonResponse<ResponsePrint> printPresenzeCorsi(Integer idCorso) {
+	public JsonResponse<ResponsePrint> printPresenzeCorso(Integer idCorso) {
 		List<String> msg = new ArrayList<String>();
 		ResponsePrint data = null;
 		boolean success = true;
 		try {
-			data = this.getManager().printPresenzeCorsi(idCorso);
+			data = this.getManager().printPresenzeCorso(idCorso);
+			msg.add(PropertiesFile.openPropertie().getProperty("operation.success"));
+		} catch (Exception e) {
+			success = false;
+			e.printStackTrace();
+			msg.add(MessageFormat.format(PropertiesFile.openPropertie().getProperty("operation.error"), e.getMessage()));
+		}
+		return new JsonResponse<ResponsePrint>(success, msg, data);
+	}
+
+	public JsonResponse<ResponsePrint> printCorso(Integer idCorso) {
+		
+		List<String> msg = new ArrayList<String>();
+		ResponsePrint data = null;
+		boolean success = true;
+		try {
+			data = this.getManager().printCorso(idCorso);
 			msg.add(PropertiesFile.openPropertie().getProperty("operation.success"));
 		} catch (Exception e) {
 			success = false;
