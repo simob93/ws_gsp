@@ -55,7 +55,11 @@ public class IscrittiCorsoManager extends StdManager<IscrittoCorso> {
 	public void operationAfterUpdate(IscrittoCorso object) throws IOException {
 		
 	}
-
+	/**
+	 * ritorna tutti gli iscritti nella tabell iscritti corso
+	 * @return
+	 * @throws MyException
+	 */
 	public List<IscrittoCorso> listIscritti() throws MyException {
 		Session session = null;
 		Transaction tx = null;
@@ -70,9 +74,11 @@ public class IscrittiCorsoManager extends StdManager<IscrittoCorso> {
 			
 			Root<IscrittoCorso> iscritti_corso = query.from(IscrittoCorso.class);
 			query.select(iscritti_corso);
-			
 		
 			data = session.createQuery(query).getResultList();
+			
+			
+			
 			
 			tx.commit();
 			
@@ -89,7 +95,14 @@ public class IscrittiCorsoManager extends StdManager<IscrittoCorso> {
 		return data;
 	}
 
-	
+	/**
+	 *  ritorna gli iscritti relativi ad una tipologia di corso
+	 * @param id
+	 * @param escludiAnnullati
+	 * @return
+	 * @throws MyException
+	 * @throws IOException
+	 */
 	public List<IscrittoCorso> listIscrittiByIdCorso(Integer id, boolean escludiAnnullati) 
 			throws MyException, IOException {
 		

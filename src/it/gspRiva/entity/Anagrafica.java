@@ -8,7 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.hibernate.annotations.Formula;
@@ -67,6 +70,12 @@ public class Anagrafica extends EntityBase  implements Serializable {
 	@Column(name="IDOPERATORE") 
 	private Integer idOperatore;
 	
+	@ManyToOne
+	@JoinColumn(name="IDCOMUNE")
+	private Comuni comune;
+	
+	@Transient
+	private Integer idComune;
 	
 	@Formula("(SELECT CONCAT(op.NOME,' ', op.COGNOME) FROM operatori AS op INNER JOIN anagrafica AS ana ON ana.IDOPERATORE = op.ID LIMIT 1)")
 	private String operatoreNominativo;
@@ -187,5 +196,16 @@ public class Anagrafica extends EntityBase  implements Serializable {
 		this.codiceFiscaleGenitore = codiceFiscaleGenitore;
 	}
 
+	public Comuni getComune() {
+		return comune;
+	}
+
+	public void setComune(Comuni comune) {
+		this.comune = comune;
+	}
+
+	public Integer getIdComune() {
+		return comune != null ? comune.getId() : null;
+	}
 	
 }

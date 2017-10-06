@@ -2,21 +2,29 @@ package it.gspRiva.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedStoredProcedureQueries;
 import javax.persistence.NamedStoredProcedureQuery;
-import javax.persistence.StoredProcedureParameter;
+import javax.persistence.OneToMany;
 import javax.persistence.ParameterMode;
+import javax.persistence.StoredProcedureParameter;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonManagedReference;
 import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.Type;
+
+import it.gspRiva.emuns.TipologiaCorsi;
 
 @XmlRootElement
 @Entity
@@ -115,6 +123,13 @@ public class Corso extends EntityBase implements Serializable {
 	
 	@Formula("(SELECT CONCAT(i.NOME,' ', i.COGNOME) FROM istruttori AS i INNER JOIN corso AS c ON i.ID = c.IDISTRUTTORE WHERE c.ID = ID)")
 	private String istruttoreNominativo;
+	
+	
+	@OneToMany(mappedBy = "corso", fetch = FetchType.EAGER)
+	private Set<IscrittoCorso> iscrittoCorso;
+	
+	@Transient
+	private String descrTipologia;
 
 	public Integer getId() {
 		return id;
@@ -290,17 +305,33 @@ public class Corso extends EntityBase implements Serializable {
 	public void setDescrizione(String descrizione) {
 		this.descrizione = descrizione;
 	}
+
+	public Set<IscrittoCorso> getIscrittoCorso() {
+		return iscrittoCorso;
+	}
+
+	public void setIscrittoCorso(Set<IscrittoCorso> iscrittoCorso) {
+		this.iscrittoCorso = iscrittoCorso;
+	}
 	
-	/*public String getDescrCorsoById(Integer id) {
+	public String getDescrCorsoById(Integer tipologia) {
 		String dscrCorso = "";
 		for (TipologiaCorsi tipologiaCorsi : TipologiaCorsi.values()) {
-			if (tipologiaCorsi.getId() == id) {
+			if (tipologiaCorsi.getId() == tipologia) {
 				dscrCorso = tipologiaCorsi.getDescrizione();
 				break;
 			}
 		}
 		return dscrCorso;
 		
-	}*/
+	}
+
+	public String getDescrTipologia() {
+		return this.getDescrCorsoById(tipologia);
+	}
+
+	public void setDescrTipologia(String descrTipologia) {
+		this.descrTipologia = descrTipologia;
+	}
 
 }

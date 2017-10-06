@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import it.gspRiva.model.PrintSchedaCorso;
+import it.gspRiva.model.ResponsePrint;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -52,20 +54,22 @@ public class StandardUtils {
 		
 	}
 	
-	public static <T> void doPrint(HashMap<String, Object> params, String fileName, List<T> dataSource) {
+	public static <T> ResponsePrint doPrint(HashMap<String, Object> params, String fileName, List<T> dataSource) {
 		JasperReport jasperReport = null;
 		JasperPrint jasperPrint = null;
 		File catalinaBase = null;
+		ResponsePrint data = new ResponsePrint();
 		try {
 			
 			catalinaBase = new File( System.getProperty( "catalina.base" ) ).getAbsoluteFile();
 			InputStream is = PropertiesFile.class.getClassLoader().getResourceAsStream("/it/gspRiva/report/"+ fileName +".jrxml");
 			jasperReport = JasperCompileManager.compileReport(is);
 			jasperPrint = JasperFillManager.fillReport(jasperReport, params, new JRBeanCollectionDataSource(dataSource));
-			JasperExportManager.exportReportToPdfFile(jasperPrint, catalinaBase + "/webapps/rpt/RP.pdf");
-			
+			JasperExportManager.exportReportToPdfFile(jasperPrint, catalinaBase + "/webapps/rpt/"+ fileName +".pdf");
+			data.setPathFile("../rpt/"+ fileName +".pdf");			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return data;
 	}
 }

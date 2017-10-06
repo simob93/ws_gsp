@@ -13,8 +13,8 @@ import it.gspRiva.exception.MyException;
 import it.gspRiva.manager.AnagraficaCorsoManager;
 import it.gspRiva.manager.CorsoManager;
 import it.gspRiva.manager.IscrittiCorsoManager;
+import it.gspRiva.model.GridListaCorsi;
 import it.gspRiva.model.JsonResponse;
-import it.gspRiva.model.ModelIscrittiCorsi;
 import it.gspRiva.model.ModelRegistrazioneCorso;
 import it.gspRiva.model.Partecipanti;
 import it.gspRiva.model.ResponsePrint;
@@ -35,7 +35,7 @@ public class CorsoService {
 			regCorso = this.getManager().listIscrittiByIdCorso(id);
 			List<Partecipanti> listPartecipanti = regCorso.getPartecipanti();
 			for (Partecipanti partecipante: listPartecipanti) {
-				this.getManager().rimuoviPartecipante(partecipante.getId(), true);
+				this.getManager().rimuoviPartecipante(partecipante.getId(), false);
 			}
 			
 		} catch (Exception e1) {
@@ -78,7 +78,6 @@ public class CorsoService {
 		boolean error = false;
 		try {
 			
-			/* controlli  */
 			AnagraficaCorsoManager anagraficaCorsoManager = new AnagraficaCorsoManager();
 			AnagraficaCorso anagraficaCorso = null;
 			List<Partecipanti> listPartecipanti = registrazioneCorso.getPartecipanti();
@@ -94,7 +93,6 @@ public class CorsoService {
 					if (Controlli.isEmptyString(partecipanti.getDeletedData())) {
 						anagraficaCorso = anagraficaCorsoManager.getById(partecipanti.getIdAnagraficaCorso()).getData();
 						if (anagraficaCorso != null) {
-							/* se la tipologia del corso è completamente diversa dalla tipologia dell partecipante genero un errore */
 							if (registrazioneCorso.getCorso().getTipologia() != anagraficaCorso.getTipologia()) {
 								msg.add("il partecipante: <b>"+ anagraficaCorso.getNominativo() +"</b> risulta iscritto ad un altra tipologia di corso");
 								error = true;
@@ -126,7 +124,7 @@ public class CorsoService {
 		List<Corso> data = new ArrayList<Corso>();
 		boolean success = true;
 		try {
-			data = this.getManager().list(false, false, null, null);
+			data = this.getManager().list(false, false, null, null, null);
 			msg.add(PropertiesFile.openPropertie().getProperty("operation.success"));
 		} catch (Exception e) {
 			success = false;
@@ -136,21 +134,21 @@ public class CorsoService {
 		return new JsonResponse<List<Corso>>(success, msg, data);
 	}
 
-	public JsonResponse<List<ModelIscrittiCorsi>> listIscrittiByCorsi(String dal, String al, Integer tipologia, String convalidati, String escludiAnnullati) 
+	public JsonResponse< List<GridListaCorsi> > listIscrittiByCorsi(String dal, String al, Integer tipologia, String convalidati, String escludiAnnullati) 
 			throws MyException, IOException {
 		
 		List<String> msg = new ArrayList<String>();
-		List<ModelIscrittiCorsi> data = new ArrayList<ModelIscrittiCorsi>();
+		 List<GridListaCorsi>  data = null;
 		boolean success = true;
 		try {
-			data = this.getManager().listIscrittiByCorsi(dal, al, tipologia, convalidati, escludiAnnullati);
+			data = this.getManager().listIscrittiByCorsi(dal, al, tipologia, Controlli.stringCompareTo(convalidati, "T", false) == 0, Controlli.stringCompareTo(escludiAnnullati, "T", false) == 0);
 			msg.add(PropertiesFile.openPropertie().getProperty("operation.success"));
 		} catch (Exception e) {
 			success = false;
 			e.printStackTrace();
 			msg.add(MessageFormat.format(PropertiesFile.openPropertie().getProperty("operation.error"), e.getMessage()));
 		}
-		return new JsonResponse<List<ModelIscrittiCorsi>>(success, msg, data);
+		return new JsonResponse< List<GridListaCorsi> >(success, msg, data);
 	}
 
 	public JsonResponse<ModelRegistrazioneCorso> listIscrittiByIdCorso(Integer idCorso) throws IOException {

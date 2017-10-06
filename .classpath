@@ -14,7 +14,7 @@
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/hibernate"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jersey"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/ireport"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jersey"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

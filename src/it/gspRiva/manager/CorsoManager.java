@@ -1,13 +1,12 @@
 package it.gspRiva.manager;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.StoredProcedureQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -15,7 +14,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.eclipse.jdt.internal.compiler.env.ISourceImport;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -25,9 +23,8 @@ import it.gspRiva.entity.AnagraficaCorso;
 import it.gspRiva.entity.Corso;
 import it.gspRiva.entity.IscrittoCorso;
 import it.gspRiva.exception.MyException;
-import it.gspRiva.model.Iscritti;
+import it.gspRiva.model.GridListaCorsi;
 import it.gspRiva.model.IscrittiPrint;
-import it.gspRiva.model.ModelIscrittiCorsi;
 import it.gspRiva.model.ModelRegistrazioneCorso;
 import it.gspRiva.model.Partecipanti;
 import it.gspRiva.model.PrintSchedaCorso;
@@ -36,12 +33,6 @@ import it.gspRiva.utils.Controlli;
 import it.gspRiva.utils.HibernateUtils;
 import it.gspRiva.utils.PropertiesFile;
 import it.gspRiva.utils.StandardUtils;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 public class CorsoManager extends StdManager<Corso> {
 
@@ -83,7 +74,7 @@ public class CorsoManager extends StdManager<Corso> {
 	}
 	
 	
-	public List<Corso> list(boolean escludiAnnullati, boolean escludiConvalidati, String dal, String al) {
+	public List<Corso> list(boolean escludiConvalidati, boolean escludiAnnullati, String dal, String al, Integer tipologia) {
 		Session session = null;
 		Transaction tx = null;
 		List<Corso> data = null;
@@ -97,12 +88,13 @@ public class CorsoManager extends StdManager<Corso> {
 			
 			Root<Corso> corso = query.from(Corso.class);
 			query.select(corso);
-			query.orderBy(builder.asc(corso.get("dal")));
+			query.orderBy(builder.desc(corso.get("dal")));
 			List<Predicate> predicates = new ArrayList<Predicate>();
-			
+			/* recuper i record che non sono annullatti  */
 			if (escludiAnnullati) {
 				predicates.add(builder.isNull(corso.get("deletedData")));
 			}
+			/* prendo solo quelli in attessa di essere convalidati  */
 			if (escludiConvalidati) {
 				predicates.add(
 						builder.or(
@@ -111,6 +103,12 @@ public class CorsoManager extends StdManager<Corso> {
 						)
 				);
 						
+			}
+			/* tipologia corso  */
+			if (tipologia != null) {
+				predicates.add(
+						builder.equal(corso.get("tipologia"), tipologia)
+				);
 			}
 			
 			if(!Controlli.isEmptyString(dal) || !Controlli.isEmptyString(al)) {
@@ -147,36 +145,34 @@ public class CorsoManager extends StdManager<Corso> {
 	 * @param tipologia 
 	 * @param al 
 	 * @param dal 
+	 * @param  
 	 * @return
 	 * @throws MyException
 	 */
-	public List<ModelIscrittiCorsi> listIscrittiByCorsi(String dal, String al, Integer tipologia, String escludiConvalidati, String escludiAnnullati) 
+	public List<GridListaCorsi>  listIscrittiByCorsi(String dal, String al, Integer tipologia, boolean escludiConvalidati, boolean escludiAnnullati) 
 			throws MyException  {
 		
 		Session session = null;
 		Transaction tx = null;
-		List<AnagraficaCorso> listAnagraficaCorso = null;
-		List<ModelIscrittiCorsi> data = new ArrayList<ModelIscrittiCorsi>();
-		IscrittiCorsoManager iscrittiCorsoManager = new IscrittiCorsoManager();
-		ModelIscrittiCorsi modelIscrittiCorso = null;
+		List<GridListaCorsi> data = new ArrayList<GridListaCorsi>();
 		try {
 			session = HibernateUtils.getSessionAnnotationFactory().openSession();
 			tx = session.beginTransaction(); 
-			List<Corso> listCorsi  = this.list(Controlli.stringCompareTo(escludiAnnullati, "T", false) == 0, Controlli.stringCompareTo(escludiConvalidati, "T", false) == 0, dal, al);
+			List<Corso> corsi = this.list(escludiConvalidati, escludiAnnullati, dal, al, tipologia);
 			
-			for (Corso corso : listCorsi) {
-				listAnagraficaCorso = new ArrayList<AnagraficaCorso>();
-				modelIscrittiCorso = new ModelIscrittiCorsi(corso);
-				Integer id = corso.getId();
-				List<IscrittoCorso> listIscrittiCorso = iscrittiCorsoManager.listIscrittiByIdCorso(id, true);
-				
-				for (IscrittoCorso iscrittoCorso : listIscrittiCorso) {
-					
-					listAnagraficaCorso.add(iscrittoCorso.getAnagraficaCorso());
+			double totale = 0;
+			Set<IscrittoCorso> iscritti = null; 
+			for (Corso c : corsi) {
+				GridListaCorsi gridListaCorsi = new GridListaCorsi(c);
+				iscritti = c.getIscrittoCorso();
+				if ( iscritti != null && iscritti.size() > 0) {
+					for (IscrittoCorso iscritto: iscritti) {
+						totale += (iscritto.getQuota() == null ? 0 : iscritto.getQuota());
+					}
+					gridListaCorsi.setTotaleTariffa((float) totale);
+					gridListaCorsi.setPartecipanti(iscritti.size());
 				}
-				
-				modelIscrittiCorso.setAnagraficaCorso(listAnagraficaCorso);
-				data.add(modelIscrittiCorso);
+				data.add(gridListaCorsi);
 			}
 			tx.commit();
 			 
@@ -386,17 +382,9 @@ public class CorsoManager extends StdManager<Corso> {
 				AnagraficaCorso anagraficaCorso = iscrittoCorso.getAnagraficaCorso();
 				anagraficaCorso.setInserito("F");
 				anagraficaCorsoManager.update(anagraficaCorso);
-				if (corsoConvalidato && !forceRemove) {
+				if (corsoConvalidato || !forceRemove) {
 					iscrittoManager.slim_delete(id);
-					iscrittoCorso = iscrittoManager.getById(id).getData();
-					partecipante.setId(iscrittoCorso.getId());
-					partecipante.setIdAnagrafica(iscrittoCorso.getAnagrafica().getId());
-					partecipante.setIdAnagraficaCorso(iscrittoCorso.getAnagraficaCorso().getId());
-					partecipante.setNominativo(iscrittoCorso.getAnagraficaCorso().getNominativo());
-					partecipante.setAcconto(iscrittoCorso.getAnagraficaCorso().getAcconto());
-					partecipante.setDeletedData(iscrittoCorso.getDeletedData());
-					partecipante.setSaldo(iscrittoCorso.getSaldo());
-					partecipante.setQuota(iscrittoCorso.getQuota());
+					
 				} else {
 					iscrittoManager.delete(id);
 				}
@@ -419,6 +407,7 @@ public class CorsoManager extends StdManager<Corso> {
 		PrintSchedaCorso schedaCorso = new PrintSchedaCorso();
 		HashMap<String, Object> params = new HashMap<String, Object>();
 		double totaleCorso = 0;
+		ResponsePrint data = null;
 		try {
 			
 			list = new IscrittiCorsoManager().listIscrittiByIdCorso(idCorso, false);
@@ -434,7 +423,7 @@ public class CorsoManager extends StdManager<Corso> {
 					boolean saldo = Controlli.stringCompareTo(iscritti.getSaldo(), "T", false) == 0;
 					boolean acconto = Controlli.stringCompareTo(anagraficaCorso.getAcconto(), "T", false) == 0;
 					
-					iscritto = new IscrittiPrint(anagrafica.getNome() + " " + anagrafica.getCognome(), anagraficaCorso.getData(), anagrafica.getDataNascita(), certificato, assicurazione, saldo ,acconto, iscritti.getQuota());
+					iscritto = new IscrittiPrint(anagrafica.getNome() + " " + anagrafica.getCognome(), anagraficaCorso.getData(), anagrafica.getDataNascita(), certificato, assicurazione, saldo ,acconto, iscritti.getQuota(), anagrafica.getComune().getNome());
 					listIscritti.add(iscritto);
 				}
 				
@@ -444,35 +433,36 @@ public class CorsoManager extends StdManager<Corso> {
 				schedaCorso.setPartecipanti(listIscritti);
 				listScedaCorso.add(schedaCorso);
 				
-				StandardUtils.doPrint(params, "stampaCorso", listScedaCorso);
+				data = StandardUtils.doPrint(params, "stampaCorso", listScedaCorso);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return null;
+		return data;
 	}
 
 	public ResponsePrint printPresenzeCorso(Integer idCorso) {
 
-		ModelRegistrazioneCorso data = null;
+		ModelRegistrazioneCorso modelRegistazione = null;
+		ResponsePrint data = null;
 		List<ModelRegistrazioneCorso> list = new ArrayList<ModelRegistrazioneCorso>();
 		HashMap<String, Object> params = new HashMap<String, Object>();
 
 		try {
 			
-			data = this.listIscrittiByIdCorso(idCorso);
-			if (data != null) {
-				list.add(data);
-				Corso cors = data.getCorso();
+			modelRegistazione = this.listIscrittiByIdCorso(idCorso);
+			if (modelRegistazione != null) {
+				list.add(modelRegistazione);
+				Corso cors = modelRegistazione.getCorso();
 				
 				params = createDettaglioCorso(params, cors);
-				params.put("numeroPartecipanti",  data.getPartecipanti().size());
-				StandardUtils.doPrint(params, "stampaPresenzeCorsi", list);
+				params.put("numeroPartecipanti",  modelRegistazione.getPartecipanti().size());
+				data = StandardUtils.doPrint(params, "stampaPresenzeCorsi", list);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return null;
+		return data;
 	}
 
 	private HashMap<String, Object> createDettaglioCorso(HashMap<String, Object> params, Corso corso) {

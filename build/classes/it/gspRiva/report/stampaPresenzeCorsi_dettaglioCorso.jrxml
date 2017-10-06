@@ -3,17 +3,33 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<field name="tipologia" class="java.lang.String"/>
-	<detail>
-		<band height="125" splitType="Stretch">
+	<parameter name="tipologia" class="java.lang.Integer"/>
+	<parameter name="numeroPartecipanti" class="java.lang.Integer"/>
+	<parameter name="giorni" class="java.lang.String"/>
+	<parameter name="minuti" class="java.lang.Integer"/>
+	<parameter name="orario" class="java.lang.String"/>
+	<parameter name="periodo" class="java.lang.String"/>
+	<parameter name="numeroLezioni" class="java.lang.Integer"/>
+	<parameter name="istruttore" class="java.lang.String"/>
+	<field name="tipologia" class="java.lang.Integer"/>
+	<pageHeader>
+		<band height="50">
+			<textField>
+				<reportElement x="0" y="16" width="100" height="20" uuid="f278b38b-98d8-4576-b729-9a462717f1b6"/>
+				<textFieldExpression><![CDATA[$P{tipologia}]]></textFieldExpression>
+			</textField>
 			<staticText>
-				<reportElement x="0" y="0" width="100" height="20" uuid="29460bf9-fd03-486d-a0ab-980ca82fc176"/>
-				<text><![CDATA[tipologia]]></text>
+				<reportElement x="352" y="17" width="100" height="20" uuid="ff58e0b6-ce34-4461-b9c9-d74cca129387"/>
+				<text><![CDATA[fanculo]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="100" y="0" width="100" height="20" uuid="49c0e15b-e259-4665-a072-73749410d8bc"/>
+				<reportElement x="227" y="30" width="100" height="20" uuid="8d4daeb2-37c2-4a74-b8e0-ceabb1782a38"/>
+				<textFieldExpression><![CDATA[$F{tipologia}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="146" y="17" width="100" height="20" uuid="b646757a-17f3-4bda-9d9f-655fcc01f53b"/>
 				<textFieldExpression><![CDATA[$F{tipologia}]]></textFieldExpression>
 			</textField>
 		</band>
-	</detail>
+	</pageHeader>
 </jasperReport>

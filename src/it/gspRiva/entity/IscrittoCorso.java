@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,6 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonBackReference;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.Formula;
 
 @XmlRootElement
@@ -32,7 +35,8 @@ public class IscrittoCorso extends EntityBase  implements Serializable {
 	@Column(name = "id", nullable = false)
 	private Integer id;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JsonIgnore
 	@JoinColumn(name="IDCORSO")
 	private Corso corso;
 	

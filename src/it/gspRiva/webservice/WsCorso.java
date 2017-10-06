@@ -14,8 +14,8 @@ import javax.ws.rs.core.MediaType;
 
 import it.gspRiva.entity.Corso;
 import it.gspRiva.exception.MyException;
+import it.gspRiva.model.GridListaCorsi;
 import it.gspRiva.model.JsonResponse;
-import it.gspRiva.model.ModelIscrittiCorsi;
 import it.gspRiva.model.ModelRegistrazioneCorso;
 import it.gspRiva.model.Partecipanti;
 import it.gspRiva.model.ResponsePrint;
@@ -59,9 +59,9 @@ public class WsCorso {
 	}
 	
 	@GET
-	@Path("/listIscrittiByCorsi")
+	@Path("/partecipanti/list")
 	@Produces(MediaType.APPLICATION_JSON)
-	public JsonResponse<List<ModelIscrittiCorsi>> listIscrittiByCorsi(@QueryParam("dal") String dal,
+	public JsonResponse< List<GridListaCorsi> > listIscrittiByCorsi(@QueryParam("dal") String dal,
 																	  @QueryParam("al") String al,
 																	  @QueryParam("tipologia") Integer tipologia,
 																	  @DefaultValue("F") @QueryParam("escludiConvalidati") String corsiConvalidati,

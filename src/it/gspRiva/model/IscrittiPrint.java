@@ -8,6 +8,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class IscrittiPrint {
 	
 	private String nominativo;
+	private String comuneResidenza;
 	private Date dataIscrizione;
 	private Date dataNascita;
 	private Boolean acconto;
@@ -17,9 +18,10 @@ public class IscrittiPrint {
 	private Boolean saldo;
 	private Float quota;
 	
-	public IscrittiPrint(String nominativo,  Date dataIscrizione, Date dataNascita, Boolean certificatoMedico, Boolean assicurazione, Boolean saldo, Boolean acconto, Float quota) {
+	public IscrittiPrint(String nominativo,  Date dataIscrizione, Date dataNascita, Boolean certificatoMedico, Boolean assicurazione, Boolean saldo, Boolean acconto, Float quota, String comuneResidenza) {
 		
 		this.nominativo = nominativo;
+		this.comuneResidenza = comuneResidenza;
 		this.dataIscrizione = dataIscrizione;
 		this.dataNascita = dataNascita;
 		this.acconto = acconto;
@@ -111,6 +113,16 @@ public class IscrittiPrint {
 
 	public void setQuota(Float quota) {
 		this.quota = quota;
+	}
+
+
+	public String getComuneResidenza() {
+		return comuneResidenza;
+	}
+
+
+	public void setComuneResidenza(String comuneResidenza) {
+		this.comuneResidenza = comuneResidenza;
 	}
 
 
