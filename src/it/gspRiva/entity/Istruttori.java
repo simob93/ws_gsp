@@ -47,9 +47,6 @@ public class Istruttori extends EntityBase implements Serializable{
 	@Column(name = "EMAIL")
 	private String email;
 	
-	@Column(name = "IDOPERATORE")
-	private Integer idOperatore;
-	
 	
 	@Transient
 	private String nominativo;
@@ -106,15 +103,4 @@ public class Istruttori extends EntityBase implements Serializable{
 		this.nominativo = nominativo;
 	}
 
-
-	public Integer getIdOperatore() {
-		return idOperatore;
-	}
-
-	public void setIdOperatore(Integer idOperatore) {
-		this.idOperatore = idOperatore;
-	}
-
-
-	
 }

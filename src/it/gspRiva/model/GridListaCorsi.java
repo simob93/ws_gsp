@@ -34,6 +34,7 @@ public class GridListaCorsi  extends Corso{
 		this.setDescrizione(corso.getDescrizione());
 		this.setDescrTipologia(corso.getDescrTipologia());
 		this.setDeletedData(corso.getDeletedData());
+		this.setOperatoreNominativo(corso.getOperatoreNominativo());
 	}
 	
 	public Float getTotaleTariffa() {

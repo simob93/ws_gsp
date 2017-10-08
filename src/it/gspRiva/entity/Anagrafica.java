@@ -70,6 +70,10 @@ public class Anagrafica extends EntityBase  implements Serializable {
 	@Column(name="IDOPERATORE") 
 	private Integer idOperatore;
 	
+
+	@Column(name="EMAIL") 
+	private String email;
+	
 	@ManyToOne
 	@JoinColumn(name="IDCOMUNE")
 	private Comuni comune;
@@ -206,6 +210,14 @@ public class Anagrafica extends EntityBase  implements Serializable {
 
 	public Integer getIdComune() {
 		return comune != null ? comune.getId() : null;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 	
 }
