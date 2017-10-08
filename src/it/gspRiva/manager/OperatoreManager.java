@@ -90,4 +90,35 @@ public class OperatoreManager extends StdManager<Operatore> {
 		}
 		return operatoreLog;
 	}
+
+	public List<Operatore> list() {
+		Session session = null;
+		Transaction tx = null;
+		List<Operatore> data = null;
+		try {
+			
+			session = HibernateUtils.getSessionAnnotationFactory().openSession();
+			tx = session.beginTransaction(); 
+						
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<Operatore> query = builder.createQuery(Operatore.class);
+			
+			Root<Operatore> operatore = query.from(Operatore.class);
+			query.select(operatore);
+			query.orderBy(builder.asc(operatore.get("cognome")));
+			data = session.createQuery(query).getResultList();
+			
+			tx.commit();
+			
+		} catch (Exception e) {
+			tx.rollback();
+			e.printStackTrace();
+			
+		} finally {
+ 			if (session != null) {
+				session.close();
+			}
+		}
+		return data;
+	}
 }

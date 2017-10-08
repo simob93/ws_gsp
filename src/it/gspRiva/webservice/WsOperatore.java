@@ -1,6 +1,7 @@
 package it.gspRiva.webservice;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -39,6 +40,13 @@ public class WsOperatore {
 		
 		return serviceOperatore.getOperatore(username, password);
 	} 
+	
+	@GET
+	@Path("/list")
+	@Produces(MediaType.APPLICATION_JSON)
+	public JsonResponse<List<Operatore>> list() throws IOException {
+		return serviceOperatore.list();
+	}
 	
 	@POST
 	@Path("/update")

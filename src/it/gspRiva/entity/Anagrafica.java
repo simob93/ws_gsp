@@ -77,7 +77,7 @@ public class Anagrafica extends EntityBase  implements Serializable {
 	@Transient
 	private Integer idComune;
 	
-	@Formula("(SELECT CONCAT(op.NOME,' ', op.COGNOME) FROM operatori AS op INNER JOIN anagrafica AS ana ON ana.IDOPERATORE = op.ID LIMIT 1)")
+	@Formula("(SELECT CONCAT(op.NOME,' ', op.COGNOME) FROM operatori AS op  WHERE op.ID = IDOPERATORE LIMIT 1)")
 	private String operatoreNominativo;
 	
 	public Integer getId() {

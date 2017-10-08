@@ -47,10 +47,7 @@ public class IscrittoCorso extends EntityBase  implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="IDANAGRAFICA_CORSO")
 	private AnagraficaCorso anagraficaCorso;
-	
-	@Formula("(SELECT CONCAT(op.NOME,' ', op.COGNOME) FROM operatori AS op INNER JOIN anagrafica_corso AS anaCorso ON anaCorso.IDOPERATORE = op.ID LIMIT 1)")
-	private String operatoreNominativo;
-	
+
 	@Column(name = "saldo")
 	private String saldo;
 	
@@ -95,17 +92,6 @@ public class IscrittoCorso extends EntityBase  implements Serializable {
 		this.anagraficaCorso = anagraficaCorso;
 	}
 
-
-	public String getOperatoreNominativo() {
-		return operatoreNominativo;
-	}
-
-
-	public void setOperatoreNominativo(String operatoreNominativo) {
-		this.operatoreNominativo = operatoreNominativo;
-	}
-
-
 	public String getSaldo() {
 		return saldo;
 	}
@@ -124,5 +110,5 @@ public class IscrittoCorso extends EntityBase  implements Serializable {
 	public void setQuota(Float quota) {
 		this.quota = quota;
 	}
-
+	
 }

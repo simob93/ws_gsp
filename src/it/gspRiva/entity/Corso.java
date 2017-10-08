@@ -118,7 +118,7 @@ public class Corso extends EntityBase implements Serializable {
 	@Column(name="DESCRIZIONE")
 	private String descrizione;
 	
-	@Formula("(SELECT CONCAT(op.NOME,' ', op.COGNOME) FROM operatori AS op INNER JOIN anagrafica_corso AS anaCorso ON anaCorso.IDOPERATORE = op.ID LIMIT 1)")
+	@Formula("(SELECT CONCAT(op.NOME,' ', op.COGNOME) FROM operatori AS op  WHERE op.ID = IDOPERATORE LIMIT 1)")
 	private String operatoreNominativo;
 	
 	@Formula("(SELECT CONCAT(i.NOME,' ', i.COGNOME) FROM istruttori AS i INNER JOIN corso AS c ON i.ID = c.IDISTRUTTORE WHERE c.ID = ID)")

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.gspRiva.emuns.DbOperation;
+import it.gspRiva.entity.Istruttori;
 import it.gspRiva.entity.Operatore;
 import it.gspRiva.manager.OperatoreManager;
 import it.gspRiva.model.JsonResponse;
@@ -69,6 +70,22 @@ public class OperatoreService {
 	
 	public JsonResponse<Operatore> delete(Integer id) throws IOException {
 		return this.getManager().operation(null, DbOperation.DELETE, id);
+	}
+
+	public JsonResponse<List<Operatore>> list() {
+		List<String> msg = new ArrayList<String>();
+		List<Operatore> data = new ArrayList<Operatore>();
+		boolean success = true;
+		try {
+			data = this.getManager().list();
+			msg.add(PropertiesFile.openPropertie().getProperty("operation.success"));
+			
+		} catch (Exception e) {
+			success = false;
+			e.printStackTrace();
+			msg.add(MessageFormat.format(PropertiesFile.openPropertie().getProperty("operation.error"), e.getMessage()));
+		}
+		return new JsonResponse<List<Operatore>>(success, msg, data);
 	}
 	
 	
