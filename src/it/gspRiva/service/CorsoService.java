@@ -35,7 +35,7 @@ public class CorsoService {
 			regCorso = this.getManager().listIscrittiByIdCorso(id);
 			List<Partecipanti> listPartecipanti = regCorso.getPartecipanti();
 			for (Partecipanti partecipante: listPartecipanti) {
-				this.getManager().rimuoviPartecipante(partecipante.getId(), false);
+				this.getManager().rimuoviPartecipante(partecipante.getId());
 			}
 			
 		} catch (Exception e1) {
@@ -187,7 +187,7 @@ public class CorsoService {
 		Partecipanti data = null;
 		boolean success = true;
 		try {
-			data = this.getManager().rimuoviPartecipante(id, false);
+			data = this.getManager().rimuoviPartecipante(id);
 			msg.add(PropertiesFile.openPropertie().getProperty("operation.success"));
 		} catch (Exception e) {
 			success = false;

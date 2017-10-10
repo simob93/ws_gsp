@@ -2,10 +2,11 @@ package it.gspRiva.emuns;
 
 public enum TipologiaCorsi {
 	
-	INDIVIDUALE(1, "Idividuale"),
+	INDIVIDUALE(1, "Individuale"),
 	GRUPPO(2, "Gruppo"),
 	DISABILI(3, "disabili"),
-	APSS(4, "Apss");
+	APSS(4, "Apss"),
+	RISERVATO(5, "Riservato");
 
 	private Integer id;
 	private String descrizione;

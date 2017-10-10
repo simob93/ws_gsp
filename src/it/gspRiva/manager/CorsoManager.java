@@ -368,7 +368,7 @@ public class CorsoManager extends StdManager<Corso> {
 	}
 	
 
-	public Partecipanti rimuoviPartecipante(Integer id, boolean forceRemove) throws Exception {
+	public Partecipanti rimuoviPartecipante(Integer id) throws Exception {
 		IscrittoCorso iscrittoCorso = null;
 		IscrittiCorsoManager iscrittoManager = new IscrittiCorsoManager();
 		AnagraficaCorsoManager anagraficaCorsoManager = new AnagraficaCorsoManager();
@@ -382,9 +382,8 @@ public class CorsoManager extends StdManager<Corso> {
 				AnagraficaCorso anagraficaCorso = iscrittoCorso.getAnagraficaCorso();
 				anagraficaCorso.setInserito("F");
 				anagraficaCorsoManager.update(anagraficaCorso);
-				if (corsoConvalidato || !forceRemove) {
+				if (corsoConvalidato) {
 					iscrittoManager.slim_delete(id);
-					
 				} else {
 					iscrittoManager.delete(id);
 				}
