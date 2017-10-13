@@ -1,20 +1,27 @@
 package it.gspRiva.webservice;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import it.gspRiva.entity.Operatore;
 import it.gspRiva.manager.OperatoreManager;
 import it.gspRiva.model.JsonResponse;
 import it.gspRiva.service.OperatoreService;
+import it.gspRiva.utils.Login;
 
 @Path("/operatore")
 public class WsOperatore {
@@ -33,12 +40,15 @@ public class WsOperatore {
 	}
 	
 	@Path("/auth")
-	@GET
+	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public JsonResponse<Operatore> getListaModuli(@QueryParam("username") String username, 
-												  @QueryParam("password") String password) throws IOException {
-		
-		return serviceOperatore.getOperatore(username, password);
+	public JsonResponse<Operatore> getListaModuli(@FormParam("username") String username, @FormParam("password") String password, @Context HttpServletRequest req, @Context HttpServletResponse resp) throws IOException {
+		JsonResponse<Operatore> data = serviceOperatore.getOperatore(username, password, req);
+		if (data.getData() != null) {
+			Operatore op = data.getData();
+			Login.setSession(req, op.getUsername(), op.getPassword());
+		} 
+		return data;
 	} 
 	
 	@GET

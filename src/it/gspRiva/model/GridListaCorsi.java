@@ -23,6 +23,7 @@ public class GridListaCorsi  extends Corso{
 		this.setLunedi(corso.getLunedi());
 		this.setMartedi(corso.getMartedi());
 		this.setMercoledi(corso.getMercoledi());
+		this.setSabato(corso.getSabato());
 		this.setGiovedi(corso.getGiovedi());
 		this.setVenerdi(corso.getVenerdi());
 		this.setPersonalizzato(corso.getPersonalizzato());

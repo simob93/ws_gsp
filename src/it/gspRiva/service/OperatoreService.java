@@ -5,6 +5,8 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import it.gspRiva.emuns.DbOperation;
 import it.gspRiva.entity.Istruttori;
 import it.gspRiva.entity.Operatore;
@@ -24,7 +26,7 @@ public class OperatoreService {
 		return new OperatoreManager();
 	}
 	
-	public JsonResponse<Operatore> getOperatore(String username, String password) throws IOException {
+	public JsonResponse<Operatore> getOperatore(String username, String password, HttpServletRequest req) throws IOException {
 		List<String> msg = new ArrayList<String>();
 		
 		if (Controlli.isEmptyString(username)) {
@@ -41,7 +43,7 @@ public class OperatoreService {
 			boolean success = true;
 			Operatore operatoreLog = null;
 			try {
-				operatoreLog = this.getManager().login(username, password);
+				operatoreLog = this.getManager().login(username, password, req);
 				if (operatoreLog == null) {
 					success = false;
 					msg.add(PropertiesFile.openPropertie().getProperty("username.invalid"));

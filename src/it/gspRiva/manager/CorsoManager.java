@@ -139,7 +139,7 @@ public class CorsoManager extends StdManager<Corso> {
 		return data;
 	}
 	/**
-	 * ritorna un lista di corsi con allegato i suoi partecipanti
+	 * ritorna un lista di corsi con allegato i suoi partecipanti usata per la dashboard corsi 
 	 * @param annnullati 
 	 * @param convalidati 
 	 * @param tipologia 

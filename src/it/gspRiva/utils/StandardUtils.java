@@ -1,6 +1,7 @@
 package it.gspRiva.utils;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
@@ -54,21 +55,25 @@ public class StandardUtils {
 		
 	}
 	
-	public static <T> ResponsePrint doPrint(HashMap<String, Object> params, String fileName, List<T> dataSource) {
+	public static <T> ResponsePrint doPrint(HashMap<String, Object> params, String fileName, List<T> dataSource) throws IOException {
 		JasperReport jasperReport = null;
 		JasperPrint jasperPrint = null;
 		File catalinaBase = null;
+		InputStream is = null;
 		ResponsePrint data = new ResponsePrint();
 		try {
 			
 			catalinaBase = new File( System.getProperty( "catalina.base" ) ).getAbsoluteFile();
-			InputStream is = PropertiesFile.class.getClassLoader().getResourceAsStream("/it/gspRiva/report/"+ fileName +".jrxml");
+			is = PropertiesFile.class.getClassLoader().getResourceAsStream("/it/gspRiva/report/"+ fileName +".jrxml");
 			jasperReport = JasperCompileManager.compileReport(is);
 			jasperPrint = JasperFillManager.fillReport(jasperReport, params, new JRBeanCollectionDataSource(dataSource));
 			JasperExportManager.exportReportToPdfFile(jasperPrint, catalinaBase + "/webapps/rpt/"+ fileName +".pdf");
 			data.setPathFile("../rpt/"+ fileName +".pdf");			
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		finally {
+			is.close();
 		}
 		return data;
 	}

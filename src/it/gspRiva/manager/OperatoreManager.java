@@ -6,12 +6,14 @@ import java.util.List;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.servlet.http.HttpServletRequest;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import it.gspRiva.entity.Operatore;
 import it.gspRiva.utils.HibernateUtils;
+import it.gspRiva.utils.Login;
 
 public class OperatoreManager extends StdManager<Operatore> {
 
@@ -52,7 +54,7 @@ public class OperatoreManager extends StdManager<Operatore> {
 		
 	}
 
-	public Operatore login(String username, String password) {
+	public Operatore login(String username, String password, HttpServletRequest req) {
 		
 		Session session = null;
 		Transaction tx = null;
@@ -76,7 +78,6 @@ public class OperatoreManager extends StdManager<Operatore> {
 			
 			List<Operatore> listOperatore = session.createQuery(query).getResultList();
 			operatoreLog = listOperatore.size() > 0 ? listOperatore.get(0) : null;
-			
 			tx.commit();
 			
 		} catch (Exception e) {

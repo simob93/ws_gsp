@@ -3,6 +3,9 @@ package it.gspRiva.utils;
 
 import java.util.TimeZone;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpSession;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -49,7 +52,7 @@ public class HibernateUtils {
  
     private static SessionFactory buildSessionAnnotationFactory() {
         try {
-        	TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+        	//TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
             // Create the SessionFactory from hibernate.cfg.xml
             Configuration configuration = new Configuration();
            // Properties properties = new Properties();
