@@ -10,6 +10,7 @@ public class GridListaCorsi  extends Corso{
 	private Float totaleTariffa;
 	private Integer partecipanti;
 	private String deletedData;
+	private String progrCorso;
 	
 	
 	public GridListaCorsi(Corso corso) {
@@ -36,6 +37,7 @@ public class GridListaCorsi  extends Corso{
 		this.setDescrTipologia(corso.getDescrTipologia());
 		this.setDeletedData(corso.getDeletedData());
 		this.setOperatoreNominativo(corso.getOperatoreNominativo());
+		this.setProgrCorso(corso.getProgrCorso());
 	}
 	
 	public Float getTotaleTariffa() {
@@ -57,6 +59,14 @@ public class GridListaCorsi  extends Corso{
 
 	public void setDeletedData(String deletedData) {
 		this.deletedData = deletedData;
+	}
+
+	public String getProgrCorso() {
+		return progrCorso;
+	}
+
+	public void setProgrCorso(String progrCorso) {
+		this.progrCorso = progrCorso;
 	}
 	
 }

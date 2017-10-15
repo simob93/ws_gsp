@@ -115,6 +115,7 @@
 	</style>
 	<subDataset name="itemDataset" uuid="1a7fa9db-3e78-412f-a63a-e7a66867614d">
 		<parameter name="totaleCorso" class="java.lang.Float"/>
+		<parameter name="IMAGE_PATH" class="java.lang.String"/>
 		<field name="nominativo" class="java.lang.String"/>
 		<field name="dataNascita" class="java.util.Date"/>
 		<field name="dataIscrizione" class="java.util.Date"/>
@@ -138,6 +139,8 @@
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["D:\\sviluppo_SW\\workspace\\WS-GspRiva\\src\\it\\gspRiva\\report\\"]]></defaultValueExpression>
 	</parameter>
+	<parameter name="IMAGE_PATH" class="java.lang.String"/>
+	<parameter name="Parameter1" class="java.lang.String"/>
 	<field name="partecipanti" class="java.util.List"/>
 	<title>
 		<band height="50" splitType="Stretch">
@@ -148,7 +151,7 @@
 			</staticText>
 			<image>
 				<reportElement x="435" y="-7" width="120" height="42" uuid="c704a19e-62a4-4005-85b0-3060c086f7c5"/>
-				<imageExpression><![CDATA["D:\\tomcat\\tomcat9.0.0\\webapps\\rpt\\image\\finLogo.jpg"]]></imageExpression>
+				<imageExpression><![CDATA[$P{IMAGE_PATH} + "finLogo.jpg"]]></imageExpression>
 			</image>
 		</band>
 	</title>
@@ -198,9 +201,12 @@
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
 				</reportElement>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-					<datasetRun subDataset="itemDataset" uuid="6188d4e5-1a5a-4465-8a61-15d4debc1ef8">
+					<datasetRun subDataset="itemDataset" uuid="7d3126c0-3250-4c64-a3a0-1c0b5c41d72e">
 						<datasetParameter name="totaleCorso">
 							<datasetParameterExpression><![CDATA[$P{totaleCorso}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="IMAGE_PATH">
+							<datasetParameterExpression><![CDATA[$P{IMAGE_PATH}]]></datasetParameterExpression>
 						</datasetParameter>
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{partecipanti})]]></dataSourceExpression>
 					</datasetRun>
@@ -319,7 +325,7 @@ Residenza]]></text>
 								<reportElement x="0" y="0" width="50" height="20" uuid="01e63273-ee7b-4f98-865a-555f5f397d3d">
 									<printWhenExpression><![CDATA[$F{assicurazione} == true]]></printWhenExpression>
 								</reportElement>
-								<imageExpression><![CDATA["D:/tomcat/tomcat9.0.0/webapps/rpt/image/check.png"]]></imageExpression>
+								<imageExpression><![CDATA[$P{IMAGE_PATH} + "check.png"]]></imageExpression>
 							</image>
 						</jr:detailCell>
 					</jr:column>
@@ -339,7 +345,7 @@ Residenza]]></text>
 								<reportElement x="0" y="0" width="39" height="20" uuid="45017a90-731e-4e47-babd-474c56e7c245">
 									<printWhenExpression><![CDATA[$F{assicurazione} == true]]></printWhenExpression>
 								</reportElement>
-								<imageExpression><![CDATA["D:/tomcat/tomcat9.0.0/webapps/rpt/image/check.png"]]></imageExpression>
+								<imageExpression><![CDATA[$P{IMAGE_PATH} + "check.png"]]></imageExpression>
 							</image>
 						</jr:detailCell>
 					</jr:column>
@@ -359,7 +365,7 @@ Residenza]]></text>
 								<reportElement x="0" y="0" width="39" height="20" uuid="83afa989-26e2-4276-8d0d-13357eea3d53">
 									<printWhenExpression><![CDATA[$F{acconto} == true]]></printWhenExpression>
 								</reportElement>
-								<imageExpression><![CDATA["D:/tomcat/tomcat9.0.0/webapps/rpt/image/check.png"]]></imageExpression>
+								<imageExpression><![CDATA[$P{IMAGE_PATH} + "check.png"]]></imageExpression>
 							</image>
 						</jr:detailCell>
 					</jr:column>
@@ -379,7 +385,7 @@ Residenza]]></text>
 								<reportElement x="0" y="0" width="39" height="20" uuid="6d57afe9-a4c1-4f3a-8d8f-70f9702ac5a3">
 									<printWhenExpression><![CDATA[$F{saldo} == true]]></printWhenExpression>
 								</reportElement>
-								<imageExpression><![CDATA["D:/tomcat/tomcat9.0.0/webapps/rpt/image/check.png"]]></imageExpression>
+								<imageExpression><![CDATA[$P{IMAGE_PATH} + "check.png"]]></imageExpression>
 							</image>
 						</jr:detailCell>
 					</jr:column>

@@ -3,6 +3,7 @@ package it.gspRiva.utils;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -63,10 +64,17 @@ public class StandardUtils {
 		ResponsePrint data = new ResponsePrint();
 		try {
 			
+			
 			catalinaBase = new File( System.getProperty( "catalina.base" ) ).getAbsoluteFile();
 			is = PropertiesFile.class.getClassLoader().getResourceAsStream("/it/gspRiva/report/"+ fileName +".jrxml");
+			
+			params.put("SUBREPORT_DIR", catalinaBase + "\\webapps\\gspRiva\\WEB-INF\\classes\\it\\gspRiva\\report\\");
+			params.put("IMAGE_PATH", catalinaBase + "\\webapps\\rpt\\image\\");
+			
+			
 			jasperReport = JasperCompileManager.compileReport(is);
 			jasperPrint = JasperFillManager.fillReport(jasperReport, params, new JRBeanCollectionDataSource(dataSource));
+			System.out.println(catalinaBase);
 			JasperExportManager.exportReportToPdfFile(jasperPrint, catalinaBase + "/webapps/rpt/"+ fileName +".pdf");
 			data.setPathFile("../rpt/"+ fileName +".pdf");			
 		} catch (Exception e) {

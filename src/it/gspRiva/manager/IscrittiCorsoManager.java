@@ -135,6 +135,8 @@ public class IscrittiCorsoManager extends StdManager<IscrittoCorso> {
 			
 			data = session.createQuery(query).getResultList();
 			
+			
+			
 			tx.commit();
 			
 		} catch (Exception e) {

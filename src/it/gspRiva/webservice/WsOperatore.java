@@ -46,7 +46,7 @@ public class WsOperatore {
 		JsonResponse<Operatore> data = serviceOperatore.getOperatore(username, password, req);
 		if (data.getData() != null) {
 			Operatore op = data.getData();
-			Login.setSession(req, op.getUsername(), op.getPassword());
+			//Login.setSession(req, op.getUsername(), op.getPassword());
 		} 
 		return data;
 	} 

@@ -84,6 +84,9 @@ public class Anagrafica extends EntityBase  implements Serializable {
 	@Formula("(SELECT CONCAT(op.NOME,' ', op.COGNOME) FROM operatori AS op  WHERE op.ID = IDOPERATORE LIMIT 1)")
 	private String operatoreNominativo;
 	
+	@Formula("(SELECT co.nome FROM comuni AS co  WHERE co.id = IDCOMUNE)")
+	private String comuneDescrizione;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -218,6 +221,10 @@ public class Anagrafica extends EntityBase  implements Serializable {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getComuneDescrizione() {
+		return comuneDescrizione;
 	}
 	
 }

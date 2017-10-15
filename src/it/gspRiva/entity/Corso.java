@@ -118,6 +118,9 @@ public class Corso extends EntityBase implements Serializable {
 	@Column(name="DESCRIZIONE")
 	private String descrizione;
 	
+	@Column(name="PROGR")
+	private String progrCorso;
+	
 	@Formula("(SELECT CONCAT(op.NOME,' ', op.COGNOME) FROM operatori AS op  WHERE op.ID = IDOPERATORE LIMIT 1)")
 	private String operatoreNominativo;
 	
@@ -130,6 +133,9 @@ public class Corso extends EntityBase implements Serializable {
 	
 	@Transient
 	private String descrTipologia;
+	
+	@Transient
+	private float percentualeCompletamento;
 
 	public Integer getId() {
 		return id;
@@ -332,6 +338,30 @@ public class Corso extends EntityBase implements Serializable {
 
 	public void setDescrTipologia(String descrTipologia) {
 		this.descrTipologia = descrTipologia;
+	}
+
+	public float getPercentualeCompletamento() {
+		Integer numeroLezioni = this.numeroLezioni;
+		float percentuale = 0;
+		/* calcolo la differenze */
+		long dayFromNow = new Date().getTime() - this.dal.getTime();
+		long totalGiorni = this.al.getTime() - this.dal.getTime();
+		
+		if (totalGiorni > 0 && dayFromNow > 0) {
+			percentuale = (dayFromNow *100) / totalGiorni;
+			if (percentuale > 100) {
+				percentuale = 100;
+			}
+		} 
+		return percentuale;
+	}
+
+	public void setPercentualeCompletamento(float percentualeCompletamento) {
+		this.percentualeCompletamento = percentualeCompletamento;
+	}
+
+	public String getProgrCorso() {
+		return "CN" + this.id;
 	}
 
 }

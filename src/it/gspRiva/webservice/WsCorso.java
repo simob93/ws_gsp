@@ -57,7 +57,17 @@ public class WsCorso {
 		return this.getService().list();
 			
 	}
-	
+	/**
+	 *  chiamata per la deshaborad dei corsi 
+	 * @param dal
+	 * @param al
+	 * @param tipologia
+	 * @param corsiConvalidati
+	 * @param escludiAnnullati
+	 * @return
+	 * @throws IOException
+	 * @throws MyException
+	 */
 	@GET
 	@Path("/partecipanti/list")
 	@Produces(MediaType.APPLICATION_JSON)

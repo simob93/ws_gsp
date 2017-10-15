@@ -206,6 +206,7 @@ public class CorsoManager extends StdManager<Corso> {
 		if (corso != null) {
 			modelRegistrazioneCorso = new ModelRegistrazioneCorso();
 			IscrittiCorsoManager iscrittiCorsoManager = new IscrittiCorsoManager();
+			corso.setIscrittoCorso(null);
 			
 			try {
 				listIscrittiCorso = iscrittiCorsoManager.listIscrittiByIdCorso(corso.getId(), false);
