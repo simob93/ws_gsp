@@ -17,6 +17,7 @@ import it.gspRiva.entity.AnagraficaCorso;
 import it.gspRiva.exception.MyException;
 import it.gspRiva.model.Iscritti;
 import it.gspRiva.model.JsonResponse;
+import it.gspRiva.model.ModelCertificatoMedico;
 import it.gspRiva.service.AnagraficaCorsoService;
 import it.gspRiva.utils.Controlli;
 
@@ -87,6 +88,13 @@ public class WsAnagraficaCorso {
 	@Produces(MediaType.APPLICATION_JSON)
 	public JsonResponse<List<AnagraficaCorso>> listByIdAnagrafica(@QueryParam("id") Integer id) throws IOException {
 		return anagraficaCorsoService.listByIdAnagrafica(id);
+	}
+	
+	@GET
+	@Path("/checkCertificatoMedico")
+	@Produces(MediaType.APPLICATION_JSON)
+	public JsonResponse<ModelCertificatoMedico> checkCertificatoMedico(@QueryParam("idAnagrafica") Integer idAnagrafica) throws IOException {
+		return anagraficaCorsoService.checkCertificatoMedico(idAnagrafica);
 	}
 	
 	@GET

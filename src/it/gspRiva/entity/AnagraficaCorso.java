@@ -82,6 +82,10 @@ public class AnagraficaCorso extends EntityBase implements Serializable {
 	@Column(name="INSERITO")
 	private String inserito;
 	
+	@Column(name="SCADENZACERTIFICATO")
+	@Type(type="date")
+	private Date scadenzaCertificato;
+	
 	@Formula("(SELECT CONCAT(op.NOME,' ', op.COGNOME) FROM operatori AS op  WHERE op.ID = IDOPERATORE LIMIT 1)")
 	private String operatoreNominativo;
 	
@@ -249,6 +253,14 @@ public class AnagraficaCorso extends EntityBase implements Serializable {
 
 	public void setNominativo(String nominativo) {
 		this.nominativo = nominativo;
+	}
+
+	public Date getScadenzaCertificato() {
+		return scadenzaCertificato;
+	}
+
+	public void setScadenzaCertificato(Date scadenzaCertificato) {
+		this.scadenzaCertificato = scadenzaCertificato;
 	}
 	
 }

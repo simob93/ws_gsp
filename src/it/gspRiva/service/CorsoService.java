@@ -117,31 +117,16 @@ public class CorsoService {
 		return new JsonResponse<ModelRegistrazioneCorso>(success, msg, data);
 	}
 
-	public JsonResponse<List<Corso>> list() 
-			throws IOException {
-		
-		List<String> msg = new ArrayList<String>();
-		List<Corso> data = new ArrayList<Corso>();
-		boolean success = true;
-		try {
-			data = this.getManager().list(false, false, null, null, null);
-			msg.add(PropertiesFile.openPropertie().getProperty("operation.success"));
-		} catch (Exception e) {
-			success = false;
-			e.printStackTrace();
-			msg.add(MessageFormat.format(PropertiesFile.openPropertie().getProperty("operation.error"), e.getMessage()));
-		}
-		return new JsonResponse<List<Corso>>(success, msg, data);
-	}
+	
 
-	public JsonResponse< List<GridListaCorsi> > listIscrittiByCorsi(String dal, String al, Integer tipologia, String convalidati, String escludiAnnullati) 
+	public JsonResponse< List<GridListaCorsi> > listIscrittiByCorsi(String dal, String al, Integer tipologia, String convalidati, String escludiAnnullati, Integer idIstruttore) 
 			throws MyException, IOException {
 		
 		List<String> msg = new ArrayList<String>();
 		 List<GridListaCorsi>  data = null;
 		boolean success = true;
 		try {
-			data = this.getManager().listIscrittiByCorsi(dal, al, tipologia, Controlli.stringCompareTo(convalidati, "T", false) == 0, Controlli.stringCompareTo(escludiAnnullati, "T", false) == 0);
+			data = this.getManager().listIscrittiByCorsi(dal, al, tipologia, Controlli.stringCompareTo(convalidati, "T", false) == 0, Controlli.stringCompareTo(escludiAnnullati, "T", false) == 0, idIstruttore);
 			msg.add(PropertiesFile.openPropertie().getProperty("operation.success"));
 		} catch (Exception e) {
 			success = false;

@@ -12,6 +12,7 @@ import it.gspRiva.exception.MyException;
 import it.gspRiva.manager.AnagraficaCorsoManager;
 import it.gspRiva.model.Iscritti;
 import it.gspRiva.model.JsonResponse;
+import it.gspRiva.model.ModelCertificatoMedico;
 import it.gspRiva.utils.PropertiesFile;
 
 public class AnagraficaCorsoService {
@@ -68,6 +69,22 @@ public class AnagraficaCorsoService {
 			msg.add(MessageFormat.format(PropertiesFile.openPropertie().getProperty("operation.error"), e.getMessage()));
 		}
 		return new JsonResponse<List<Iscritti>>(success, msg, listIscritti);
+	}
+
+	public JsonResponse<ModelCertificatoMedico> checkCertificatoMedico(Integer idAnagrafica) {
+		List<String> msg = new ArrayList<String>();
+		boolean success = true;
+		ModelCertificatoMedico data = null;
+		try {
+			data = this.getManager().checkCertificatoMedico(idAnagrafica);
+			msg.add(PropertiesFile.openPropertie().getProperty("operation.success"));
+			
+		} catch (Exception e) {
+			success = false;
+			e.printStackTrace();
+			msg.add(MessageFormat.format(PropertiesFile.openPropertie().getProperty("operation.error"), e.getMessage()));
+		}
+		return new JsonResponse<ModelCertificatoMedico>(success, msg, data);
 	}
 	
 }

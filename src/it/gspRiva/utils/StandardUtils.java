@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +25,16 @@ public class StandardUtils {
 	public static Date currentDateTime() {
 		Date d = new Date();
 		return d;
+	}
+	
+	public static Date azzeraMinutiOreSecondi(Date data) {
+		 Calendar cal = Calendar.getInstance();
+		 cal.setTime(data);
+		 cal.set(Calendar.HOUR_OF_DAY, 0);
+		 cal.set(Calendar.MINUTE, 0);
+		 cal.set(Calendar.SECOND, 0);
+		return cal.getTime();
+		
 	}
 	
 	public static int dateBetween(Date d1, Date d2, String type) {

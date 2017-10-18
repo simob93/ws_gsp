@@ -3,6 +3,7 @@ package it.gspRiva.manager;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +21,7 @@ import it.gspRiva.entity.Anagrafica;
 import it.gspRiva.entity.AnagraficaCorso;
 import it.gspRiva.exception.MyException;
 import it.gspRiva.model.Iscritti;
+import it.gspRiva.model.ModelCertificatoMedico;
 import it.gspRiva.utils.Controlli;
 import it.gspRiva.utils.HibernateUtils;
 import it.gspRiva.utils.PropertiesFile;
@@ -218,5 +220,58 @@ public class AnagraficaCorsoManager extends StdManager<AnagraficaCorso> {
 			}
 		}
 		return listaIscritti;
+	}
+
+	public ModelCertificatoMedico checkCertificatoMedico(Integer idAnagrafica) {
+		Session session = null;
+		Transaction tx = null;
+		List<AnagraficaCorso> anagCorso = null;
+		ModelCertificatoMedico data = new ModelCertificatoMedico();
+		try {
+			
+			session = HibernateUtils.getSessionAnnotationFactory().openSession();
+			tx = session.beginTransaction(); 
+						
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<AnagraficaCorso> query = builder.createQuery(AnagraficaCorso.class);
+			
+			Root<AnagraficaCorso> anagraficaCorso = query.from(AnagraficaCorso.class);
+			
+			query.select(anagraficaCorso);
+			
+			query.where(
+				builder.equal(anagraficaCorso.get("idAnagrafica"), idAnagrafica)
+			);
+			query.orderBy(builder.desc(anagraficaCorso.get("scadenzaCertificato")));
+			
+			anagCorso =  session.createQuery(query).setMaxResults(1).getResultList();
+			
+			if (anagCorso != null && anagCorso.size() > 0) {
+				
+				Date oggi = StandardUtils.currentDateTime();
+				oggi = StandardUtils.azzeraMinutiOreSecondi(oggi);
+				Date sc_certMedico = anagCorso.get(0).getScadenzaCertificato();
+				
+				if (sc_certMedico != null) {
+					
+					boolean scaduto = sc_certMedico.before(oggi);
+					data.setScaduto(scaduto);
+					data.setDataScadenza(sc_certMedico);
+				}
+				
+			}
+			
+			tx.commit();
+			
+		} catch (Exception e) {
+			tx.rollback();
+			e.printStackTrace();
+			
+		} finally {
+ 			if (session != null) {
+				session.close();
+			}
+		}
+		return data;
 	}
 }

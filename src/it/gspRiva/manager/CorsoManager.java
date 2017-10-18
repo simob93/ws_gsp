@@ -74,7 +74,7 @@ public class CorsoManager extends StdManager<Corso> {
 	}
 	
 	
-	public List<Corso> list(boolean escludiConvalidati, boolean escludiAnnullati, String dal, String al, Integer tipologia) {
+	public List<Corso> list(boolean escludiConvalidati, boolean escludiAnnullati, String dal, String al, Integer tipologia, Integer idIstruttore) {
 		Session session = null;
 		Transaction tx = null;
 		List<Corso> data = null;
@@ -104,6 +104,14 @@ public class CorsoManager extends StdManager<Corso> {
 				);
 						
 			}
+			
+			if (idIstruttore != null) {
+				predicates.add(
+					builder.equal(corso.get("idIstruttore"), idIstruttore)
+				);
+			}
+			
+			
 			/* tipologia corso  */
 			if (tipologia != null) {
 				predicates.add(
@@ -149,7 +157,7 @@ public class CorsoManager extends StdManager<Corso> {
 	 * @return
 	 * @throws MyException
 	 */
-	public List<GridListaCorsi>  listIscrittiByCorsi(String dal, String al, Integer tipologia, boolean escludiConvalidati, boolean escludiAnnullati) 
+	public List<GridListaCorsi>  listIscrittiByCorsi(String dal, String al, Integer tipologia, boolean escludiConvalidati, boolean escludiAnnullati, Integer idIstruttore) 
 			throws MyException  {
 		
 		Session session = null;
@@ -158,7 +166,7 @@ public class CorsoManager extends StdManager<Corso> {
 		try {
 			session = HibernateUtils.getSessionAnnotationFactory().openSession();
 			tx = session.beginTransaction(); 
-			List<Corso> corsi = this.list(escludiConvalidati, escludiAnnullati, dal, al, tipologia);
+			List<Corso> corsi = this.list(escludiConvalidati, escludiAnnullati, dal, al, tipologia, idIstruttore);
 			
 			double totale = 0;
 			Set<IscrittoCorso> iscritti = null; 

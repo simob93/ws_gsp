@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 
 import it.gspRiva.entity.Anagrafica;
 import it.gspRiva.entity.Corso;
+import it.gspRiva.exception.MyException;
 import it.gspRiva.model.JsonResponse;
 import it.gspRiva.service.AnagraficaService;
 
@@ -46,7 +47,7 @@ public class WsAnagrafica {
 	@Path("/save")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public JsonResponse<Anagrafica> save(Anagrafica anagrafica) throws IOException {
+	public JsonResponse<Anagrafica> save(Anagrafica anagrafica) throws IOException, MyException {
 		return anagraficaService.save(anagrafica);
 	}
 	
@@ -54,14 +55,14 @@ public class WsAnagrafica {
 	@Path("/update")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public JsonResponse<Anagrafica> update(Anagrafica anagrafica) throws IOException {
+	public JsonResponse<Anagrafica> update(Anagrafica anagrafica) throws IOException, MyException {
 		return anagraficaService.update(anagrafica);
 	}
 	
 	@GET
 	@Path("/delete")
 	@Produces(MediaType.APPLICATION_JSON)
-	public JsonResponse<Anagrafica> delete(@QueryParam("id") Integer id) throws IOException {
+	public JsonResponse<Anagrafica> delete(@QueryParam("id") Integer id) throws IOException, MyException {
 		return anagraficaService.delete(id);
 	}
 	

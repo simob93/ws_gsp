@@ -45,20 +45,7 @@ public class WsCorso {
 	}*/
 	
 	/**
-	 * 
-	 * @return
-	 * @throws IOException
-	 * @throws MyException
-	 */
-	@GET
-	@Path("/list")
-	@Produces(MediaType.APPLICATION_JSON)
-	public JsonResponse<List<Corso>> list() throws IOException{
-		return this.getService().list();
-			
-	}
-	/**
-	 *  chiamata per la deshaborad dei corsi 
+	 *  chiamata per la deshaborad 
 	 * @param dal
 	 * @param al
 	 * @param tipologia
@@ -75,9 +62,10 @@ public class WsCorso {
 																	  @QueryParam("al") String al,
 																	  @QueryParam("tipologia") Integer tipologia,
 																	  @DefaultValue("F") @QueryParam("escludiConvalidati") String corsiConvalidati,
-																	  @DefaultValue("T") @QueryParam("escludiAnnullati") String escludiAnnullati
+																	  @DefaultValue("T") @QueryParam("escludiAnnullati") String escludiAnnullati,
+																	  @QueryParam("idIstruttore") Integer idIstruttore
 			) throws IOException, MyException {
-		return this.getService().listIscrittiByCorsi(dal, al, tipologia, corsiConvalidati, escludiAnnullati);
+		return this.getService().listIscrittiByCorsi(dal, al, tipologia, corsiConvalidati, escludiAnnullati, idIstruttore);
 			
 	}
 	

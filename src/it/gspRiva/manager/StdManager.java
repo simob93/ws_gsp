@@ -5,10 +5,12 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.RollbackException;
 import javax.persistence.Table;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.query.Query;
 
 import it.gspRiva.emuns.ChiaviEsterne;
@@ -295,12 +297,20 @@ public abstract class StdManager<T> implements CrudOperation<T>  {
 			session.delete(object);
 			tx.commit();
 			
-		} catch (Exception e) {
+		}catch (Exception  e) {
 			success = false;
+			Throwable t  = null;
+			Throwable t2 = null;
 			tx.rollback();
+			t =e.getCause();
+			if (t instanceof ConstraintViolationException) {
+				t2 = (ConstraintViolationException) t;
+				/* gestione errore di violazione chiave esterna  */
+			}
 			e.printStackTrace();
 			
-		} finally {
+		} 
+		finally {
 			if (session != null) {
 				session.close();
 			}
