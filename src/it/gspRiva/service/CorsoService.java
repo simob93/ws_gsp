@@ -15,6 +15,7 @@ import it.gspRiva.manager.CorsoManager;
 import it.gspRiva.manager.IscrittiCorsoManager;
 import it.gspRiva.model.GridListaCorsi;
 import it.gspRiva.model.JsonResponse;
+import it.gspRiva.model.KeyValue;
 import it.gspRiva.model.ModelRegistrazioneCorso;
 import it.gspRiva.model.Partecipanti;
 import it.gspRiva.model.ResponsePrint;
@@ -212,4 +213,6 @@ public class CorsoService {
 		}
 		return new JsonResponse<ResponsePrint>(success, msg, data);
 	}
+
+	
 }

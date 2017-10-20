@@ -3,35 +3,45 @@ package it.gspRiva.model;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 
-public class KeyValue<T> {
+public class KeyValue<T1, T2, T> {
 	
 	
 	
-	private T key;
-	private T value;
+	private T1 key;
+	private T2 value;
+	private T extra;
 	
 	public KeyValue() {}
 	
 	@JsonCreator
-	public KeyValue(@JsonProperty("key") T key, @JsonProperty("value") T value) {
+	public KeyValue(@JsonProperty("key") T1 key, @JsonProperty("value") T2 value, @JsonProperty("extra") T extra) {
 		this.key = key;
 		this.value = value;
+		this.extra = extra;
 	}
 
-	public T getKey() {
+	public T1 getKey() {
 		return key;
 	}
 
-	public void setKey(T key) {
+	public void setKey(T1 key) {
 		this.key = key;
 	}
 
-	public T getValue() {
+	public T2 getValue() {
 		return value;
 	}
 
-	public void setValue(T value) {
+	public void setValue(T2 value) {
 		this.value = value;
+	}
+
+	public T getExtra() {
+		return extra;
+	}
+
+	public void setExtra(T extra) {
+		this.extra = extra;
 	}
 
 	

@@ -96,4 +96,11 @@ public class StandardUtils {
 		}
 		return data;
 	}
+
+	public static Date sommaGiorni(Date data, Integer numberDay) {
+		Calendar cal = Calendar.getInstance();
+	    cal.setTime(data);
+	    cal.add(Calendar.DATE, numberDay);  
+		return cal.getTime();
+	}
 }

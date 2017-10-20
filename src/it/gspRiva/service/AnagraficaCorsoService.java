@@ -3,6 +3,7 @@ package it.gspRiva.service;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import it.gspRiva.exception.MyException;
 import it.gspRiva.manager.AnagraficaCorsoManager;
 import it.gspRiva.model.Iscritti;
 import it.gspRiva.model.JsonResponse;
+import it.gspRiva.model.KeyValue;
 import it.gspRiva.model.ModelCertificatoMedico;
 import it.gspRiva.utils.PropertiesFile;
 
@@ -85,6 +87,22 @@ public class AnagraficaCorsoService {
 			msg.add(MessageFormat.format(PropertiesFile.openPropertie().getProperty("operation.error"), e.getMessage()));
 		}
 		return new JsonResponse<ModelCertificatoMedico>(success, msg, data);
+	}
+
+	public JsonResponse<List<KeyValue<String, String, Integer>>> checkCertificatiScaduti() {
+		List<String> msg = new ArrayList<String>();
+		boolean success = true;
+		List<KeyValue<String, String, Integer>> data = null;
+		try {
+			data = this.getManager().checkCertificatiScaduti();
+			msg.add(PropertiesFile.openPropertie().getProperty("operation.success"));
+			
+		} catch (Exception e) {
+			success = false;
+			e.printStackTrace();
+			msg.add(MessageFormat.format(PropertiesFile.openPropertie().getProperty("operation.error"), e.getMessage()));
+		}
+		return new JsonResponse<List<KeyValue<String, String, Integer>>>(success, msg, data);
 	}
 	
 }
