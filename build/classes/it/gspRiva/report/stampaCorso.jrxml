@@ -140,19 +140,19 @@
 		<defaultValueExpression><![CDATA["D:\\sviluppo_SW\\workspace\\WS-GspRiva\\src\\it\\gspRiva\\report\\"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="IMAGE_PATH" class="java.lang.String"/>
-	<parameter name="Parameter1" class="java.lang.String"/>
+	<parameter name="titleReport" class="java.lang.String"/>
 	<field name="partecipanti" class="java.util.List"/>
 	<title>
-		<band height="50" splitType="Stretch">
-			<staticText>
-				<reportElement x="0" y="15" width="555" height="20" uuid="d128d1b0-9a5c-4022-a76e-c26ef43ec6af"/>
-				<textElement textAlignment="Center"/>
-				<text><![CDATA[SCHEDA CORSO]]></text>
-			</staticText>
+		<band height="52" splitType="Stretch">
 			<image>
 				<reportElement x="435" y="-7" width="120" height="42" uuid="c704a19e-62a4-4005-85b0-3060c086f7c5"/>
 				<imageExpression><![CDATA[$P{IMAGE_PATH} + "finLogo.jpg"]]></imageExpression>
 			</image>
+			<textField>
+				<reportElement x="0" y="0" width="555" height="52" uuid="0138b153-14e9-44de-bd0a-c1b69c1b1883"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{titleReport}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>

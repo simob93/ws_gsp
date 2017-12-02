@@ -57,12 +57,12 @@ public class AnagraficaCorsoService {
 		return new JsonResponse<List<AnagraficaCorso>>(success, msg, listAnagraficaCorso);
 	}
 	
-	public JsonResponse<List<Iscritti>> search(String dal, String al, Integer tipologia, HashMap<String, String> has) throws MyException, IOException {
+	public JsonResponse<List<Iscritti>> search(String dal, String al, Integer tipologia, HashMap<String, String> has, String nominativo) throws MyException, IOException {
 		List<String> msg = new ArrayList<String>();
 		boolean success = true;
 		List<Iscritti> listIscritti = null;
 		try {
-			listIscritti = this.getManager().search(dal, al, tipologia, has);
+			listIscritti = this.getManager().search(dal, al, tipologia, has, nominativo);
 			msg.add(PropertiesFile.openPropertie().getProperty("operation.success"));
 			
 		} catch (Exception e) {

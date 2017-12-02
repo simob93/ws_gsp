@@ -438,6 +438,7 @@ public class CorsoManager extends StdManager<Corso> {
 				params = createDettaglioCorso(params, list.get(0).getCorso());
 				params.put("numeroPartecipanti",  listIscritti.size());
 				params.put("totaleCorso", (float) totaleCorso);
+				params.put("titleReport", "Scheda rosa");
 				schedaCorso.setPartecipanti(listIscritti);
 				listScedaCorso.add(schedaCorso);
 				
@@ -465,6 +466,7 @@ public class CorsoManager extends StdManager<Corso> {
 				
 				params = createDettaglioCorso(params, cors);
 				params.put("numeroPartecipanti",  modelRegistazione.getPartecipanti().size());
+				params.put("titleReport", "Scheda bianca");
 				data = StandardUtils.doPrint(params, "stampaPresenzeCorsi", list);
 			}
 		} catch (Exception e) {

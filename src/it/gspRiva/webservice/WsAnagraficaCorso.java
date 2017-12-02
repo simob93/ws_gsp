@@ -49,6 +49,7 @@ public class WsAnagraficaCorso {
             @QueryParam("sabato") String sabato,
             @QueryParam("numLezioni") Integer numLezioni,
             @QueryParam("minLezioni") Integer minLezioni,
+            @QueryParam("nominativo") String nominativo,
             @QueryParam("personalizzato") String personalizzato) throws IOException, MyException {
 		
 		HashMap<String, String> has = new HashMap<String, String>();
@@ -80,7 +81,7 @@ public class WsAnagraficaCorso {
 		if (minLezioni != null) {
 			has.put("minutiLezioni", minLezioni.toString());
 		}
-		return anagraficaCorsoService.search(dal, al, tipologia, has);
+		return anagraficaCorsoService.search(dal, al, tipologia, has, nominativo);
 	}
 
 	@GET

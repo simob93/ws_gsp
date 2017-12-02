@@ -102,7 +102,7 @@ public class AnagraficaCorsoManager extends StdManager<AnagraficaCorso> {
 		return listAnagraficaCorso;
 	}
 
-	public List<Iscritti> search(String dal, String al, Integer tipologia, HashMap<String, String> has) throws MyException, IOException {
+	public List<Iscritti> search(String dal, String al, Integer tipologia, HashMap<String, String> has, String nominativo) throws MyException, IOException {
 		
 		Session session = null;
 		Transaction tx = null;
@@ -136,7 +136,12 @@ public class AnagraficaCorsoManager extends StdManager<AnagraficaCorso> {
 			if (!Controlli.isEmptyString(al)) {
 				dataAl = sdf.parse(al);
 				hql += "AND ac.data <= :al ";
-			} 
+			}
+			
+			if (!Controlli.isEmptyString(nominativo)) {
+				hql += "AND (an.nome LIKE '%"+ nominativo + "%'  OR an.cognome LIKE '%" + nominativo + "%') ";
+			}
+			
 			
 			if (tipologia != null) {
 				hql += "AND ac.tipologia=" + tipologia + " ";

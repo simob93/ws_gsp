@@ -15,14 +15,15 @@
 	<parameter name="periodo" class="java.lang.String"/>
 	<parameter name="numeroLezioni" class="java.lang.Integer"/>
 	<parameter name="numeroPartecipanti" class="java.lang.Integer"/>
+	<parameter name="titleReport" class="java.lang.String"/>
 	<field name="partecipanti" class="java.util.List"/>
 	<title>
-		<band height="50">
-			<staticText>
-				<reportElement x="0" y="15" width="555" height="20" uuid="6edb7415-cfab-451a-9a75-10ddea1a7e0e"/>
-				<textElement textAlignment="Center"/>
-				<text><![CDATA[SCHEDA CORSO PRESENZE]]></text>
-			</staticText>
+		<band height="61">
+			<textField>
+				<reportElement x="0" y="0" width="555" height="61" uuid="a73d2249-0ad6-4351-a94b-b54b6ef003a3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{titleReport}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>
