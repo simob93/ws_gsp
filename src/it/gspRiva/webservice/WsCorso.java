@@ -13,6 +13,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import it.gspRiva.entity.Corso;
+import it.gspRiva.entity.IscrittoCorso;
 import it.gspRiva.exception.MyException;
 import it.gspRiva.model.GridListaCorsi;
 import it.gspRiva.model.JsonResponse;
@@ -36,13 +37,13 @@ public class WsCorso {
 	 * @throws IOException
 	 * @throws MyException
 	 */
-	/*@GET
+	@GET
 	@Path("/listIscritti")
 	@Produces(MediaType.APPLICATION_JSON)
 	public JsonResponse<List<IscrittoCorso>> listIscritti() throws IOException, MyException{
 		return this.getService().listIscritti();
 			
-	}*/
+	}
 	
 	/**
 	 *  chiamata per la deshaborad 

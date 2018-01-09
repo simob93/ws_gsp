@@ -34,7 +34,6 @@ public class AnagraficaCorsoManager extends StdManager<AnagraficaCorso> {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static final int ArrayList = 0;
 
 	@Override
 	protected Class<AnagraficaCorso> getEntityClass() {
@@ -127,24 +126,37 @@ public class AnagraficaCorsoManager extends StdManager<AnagraficaCorso> {
 			 */
 			String hql = "FROM AnagraficaCorso As ac INNER JOIN Anagrafica AS an ON ac.idAnagrafica = an.id WHERE "
 					+ "ac.deletedData is null "
-					+ "AND (ac.inserito is null OR ac.inserito='F') "
-					+ "AND ac.data >= :dal ";
+					+ "AND (ac.inserito is null OR ac.inserito='F') ";
 					
 					//+ "ORDER BY ac.data DESC";
 			
-			
-			if (!Controlli.isEmptyString(al)) {
-				dataAl = sdf.parse(al);
-				hql += "AND ac.data <= :al ";
+			if (tipologia == 1 || tipologia == 3 || tipologia == 4) {
+				
+				if (!Controlli.isEmptyString(dal)) {
+					dataDal = sdf.parse(dal);
+					hql += "AND ac.data >= :dal ";
+				}
+				
+				if (!Controlli.isEmptyString(al)) {
+					dataAl = sdf.parse(al);
+					hql += "AND ac.data <= :al ";
+				}
+				
+			} else {
+				
+				if (!Controlli.isEmptyString(dal)) {
+					dataDal = sdf.parse(dal);
+					hql += "AND ac.dataInizio >= :dal ";
+				}
+				
+				if (!Controlli.isEmptyString(al)) {
+					dataAl = sdf.parse(al);
+					hql += "AND ac.dataFine <= :al ";
+				}
 			}
 			
 			if (!Controlli.isEmptyString(nominativo)) {
 				hql += "AND (an.nome LIKE '%"+ nominativo + "%'  OR an.cognome LIKE '%" + nominativo + "%') ";
-			}
-			
-			
-			if (tipologia != null) {
-				hql += "AND ac.tipologia=" + tipologia + " ";
 			}
 			
 			if (has.size() > 0) {
@@ -190,18 +202,8 @@ public class AnagraficaCorsoManager extends StdManager<AnagraficaCorso> {
 							modelIscritti.setSabato(ac.getSabato());
 							modelIscritti.setPersonalizzato(ac.getPersonalizzato());
 							modelIscritti.setMinutiLezioni(ac.getMinutiLezioni());
-							modelIscritti.setNumeroLezioni(ac.getNumeroLezioni());
-							
+							modelIscritti.setNumeroLezioni(ac.getNumeroLezioni());				
 							modelIscritti.setTipologia(ac.getTipologia());
-							modelIscritti.setTipologia(ac.getTipologia());
-							modelIscritti.setTipologia(ac.getTipologia());
-							modelIscritti.setTipologia(ac.getTipologia());
-							modelIscritti.setTipologia(ac.getTipologia());
-							modelIscritti.setTipologia(ac.getTipologia());
-							modelIscritti.setTipologia(ac.getTipologia());
-							modelIscritti.setTipologia(ac.getTipologia());
-							modelIscritti.setTipologia(ac.getTipologia());
-							
 							
 						}
 						if (res instanceof Anagrafica) {
