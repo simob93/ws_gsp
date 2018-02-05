@@ -120,13 +120,14 @@ public class AnagraficaCorsoManager extends StdManager<AnagraficaCorso> {
 			Date dataDal = sdf.parse(dal);
 			Date dataAl = null;
 			session = HibernateUtils.getSessionAnnotationFactory().openSession();
+			StringBuilder hql = new StringBuilder();
 			tx = session.beginTransaction(); 
 			/*
 			 *  escludo le iscrizioni annullate
 			 */
-			String hql = "FROM AnagraficaCorso As ac INNER JOIN Anagrafica AS an ON ac.idAnagrafica = an.id WHERE "
-					+ "ac.deletedData is null "
-					+ "AND (ac.inserito is null OR ac.inserito='F') ";
+			hql.append("FROM AnagraficaCorso As ac INNER JOIN Anagrafica AS an ON ac.idAnagrafica = an.id WHERE ")
+			   .append("ac.deletedData is null ")
+			   .append("AND (ac.inserito is null OR ac.inserito='F') ");
 					
 					//+ "ORDER BY ac.data DESC";
 			
@@ -134,29 +135,29 @@ public class AnagraficaCorsoManager extends StdManager<AnagraficaCorso> {
 				
 				if (!Controlli.isEmptyString(dal)) {
 					dataDal = sdf.parse(dal);
-					hql += "AND ac.data >= :dal ";
+					hql.append("AND ac.data >= :dal ");
 				}
 				
 				if (!Controlli.isEmptyString(al)) {
 					dataAl = sdf.parse(al);
-					hql += "AND ac.data <= :al ";
+					hql.append("AND ac.data <= :al ");
 				}
 				
 			} else {
 				
 				if (!Controlli.isEmptyString(dal)) {
 					dataDal = sdf.parse(dal);
-					hql += "AND ac.dataInizio >= :dal ";
+					hql.append("AND ac.dataInizio >= :dal ");
 				}
 				
 				if (!Controlli.isEmptyString(al)) {
 					dataAl = sdf.parse(al);
-					hql += "AND ac.dataFine <= :al ";
+					hql.append("AND ac.dataFine <= :al ");
 				}
 			}
 			
 			if (!Controlli.isEmptyString(nominativo)) {
-				hql += "AND (an.nome LIKE '%"+ nominativo + "%'  OR an.cognome LIKE '%" + nominativo + "%') ";
+				hql.append("AND (an.nome LIKE '%").append(nominativo).append("%')").append("OR (an.cognome LIKE '%").append(nominativo).append("%')");
 			}
 			
 			if (has.size() > 0) {
@@ -165,13 +166,16 @@ public class AnagraficaCorsoManager extends StdManager<AnagraficaCorso> {
 			
 				for(Entry<String, String> entry : has.entrySet()) {
 					value = "'" + entry.getValue() + "'";
-					hql += "AND ac."+ entry.getKey() + "=" + value;
+					hql.append("AND ac.")
+					   .append(entry.getKey())
+					   .append("=")
+					   .append(value);
 				}
 			}
 			
-			hql += "ORDER BY ac.data DESC";
+			hql.append("ORDER BY ac.data DESC");
 			
-			Query query = session.createQuery(hql);
+			Query query = session.createQuery(hql.toString());
 			query.setParameter("dal", dataDal);
 			if (dataAl != null) {
 				query.setParameter("al", dataAl);

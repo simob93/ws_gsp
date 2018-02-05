@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.FetchType;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -71,8 +72,10 @@ public class IscrittiCorsoManager extends StdManager<IscrittoCorso> {
 						
 			CriteriaBuilder builder = session.getCriteriaBuilder();
 			CriteriaQuery<IscrittoCorso> query = builder.createQuery(IscrittoCorso.class);
-			
 			Root<IscrittoCorso> iscritti_corso = query.from(IscrittoCorso.class);
+			iscritti_corso.fetch("anagraficaCorso");
+			iscritti_corso.fetch("corso");
+			iscritti_corso.fetch("anagrafica");
 			query.select(iscritti_corso);
 		
 			data = session.createQuery(query).getResultList();
@@ -124,6 +127,9 @@ public class IscrittiCorsoManager extends StdManager<IscrittoCorso> {
 			
 			Root<IscrittoCorso> iscritti_corso = query.from(IscrittoCorso.class);
 			query.select(iscritti_corso);
+			iscritti_corso.fetch("anagraficaCorso");
+			iscritti_corso.fetch("corso");
+			iscritti_corso.fetch("anagrafica");
 			List<Predicate> predicates = new ArrayList<Predicate>();
 			predicates.add(builder.equal(iscritti_corso.get("corso").get("id"), id));
 			

@@ -2,9 +2,11 @@ package it.gspRiva.model;
 
 import java.util.Date;
 
+import javax.persistence.Entity;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
+@Entity
 public class Iscritti {
 	
 	private Integer idAnagrafica;
