@@ -14,12 +14,13 @@ public class Iscritti {
 	private String nominativo;
 	private Date dataIscrizione;
 	private Date dataNascita;
-	private Boolean maggiorenne;
-	private Boolean acconto;
-	private Boolean certificatoMedico;
-	private Boolean assicurazione;
+	private String maggiorenne;
+	private String acconto;
+	private String certificatoMedico;
+	private String assicurazione;
 	private Integer tipologia;
-	
+	private Date dataInizio;
+	private Date dataFine;
 	private String lunedi;
 	private String martedi;
 	private String mercoledi;
@@ -30,7 +31,7 @@ public class Iscritti {
 	private Integer numeroLezioni;
 	private Integer minutiLezioni;
 	
-	public Iscritti(String nominativo,  Date dataIscrizione, Date dataNascita, Boolean maggiorenne, Boolean acconto,  Boolean certificatoMedico, Boolean assicurazione, Integer idAnagrafica, Integer idAnagraficaCorso, Integer tipologia, String lunedi, String martedi, String mercoledi, String giovedi, String venerdi, String sabato, String personalizzato, Integer numeroLezioni, Integer minutiLezioni) {
+	public Iscritti(String nominativo,  Date dataIscrizione, Date dataNascita, String maggiorenne, String acconto,  String certificatoMedico, String assicurazione, Integer idAnagrafica, Integer idAnagraficaCorso, Integer tipologia, String lunedi, String martedi, String mercoledi, String giovedi, String venerdi, String sabato, String personalizzato, Integer numeroLezioni, Integer minutiLezioni, Date dataInizio, Date dataFine) {
 		
 		this.nominativo = nominativo;
 		this.dataIscrizione = dataIscrizione;
@@ -50,6 +51,8 @@ public class Iscritti {
 		this.personalizzato = personalizzato;
 		this.numeroLezioni = numeroLezioni;
 		this.minutiLezioni = minutiLezioni;
+		this.dataFine = dataFine;
+		this.dataInizio = dataInizio;
 	}
 	
 	
@@ -75,30 +78,30 @@ public class Iscritti {
 	public void setDataNascita(Date dataNascita) {
 		this.dataNascita = dataNascita;
 	}
-	public Boolean getMaggiorenne() {
+	public String getMaggiorenne() {
 		return maggiorenne;
 	}
-	public void setMaggiorenne(Boolean maggiorenne) {
+	public void setMaggiorenne(String maggiorenne) {
 		this.maggiorenne = maggiorenne;
 	}
-	public Boolean getAcconto() {
+	public String getAcconto() {
 		return acconto;
 	}
-	public void setAcconto(Boolean acconto) {
+	public void setAcconto(String acconto) {
 		this.acconto = acconto;
 	}
-	public Boolean getCertificatoMedico() {
+	public String getCertificatoMedico() {
 		return certificatoMedico;
 	}
-	public void setCertificatoMedico(Boolean certificatoMedico) {
+	public void setCertificatoMedico(String certificatoMedico) {
 		this.certificatoMedico = certificatoMedico;
 	}
-	public Boolean getAssicurazione() {
+	public String getAssicurazione() {
 		return assicurazione;
 	}
 
 
-	public void setAssicurazione(Boolean assicurazione) {
+	public void setAssicurazione(String assicurazione) {
 		this.assicurazione = assicurazione;
 	}
 
@@ -220,6 +223,26 @@ public class Iscritti {
 
 	public void setMinutiLezioni(Integer minutiLezioni) {
 		this.minutiLezioni = minutiLezioni;
+	}
+
+
+	public Date getDataInizio() {
+		return dataInizio;
+	}
+
+
+	public void setDataInizio(Date dataInizio) {
+		this.dataInizio = dataInizio;
+	}
+
+
+	public Date getDataFine() {
+		return dataFine;
+	}
+
+
+	public void setDataFine(Date dataFine) {
+		this.dataFine = dataFine;
 	}
 	
 	
