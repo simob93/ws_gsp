@@ -300,13 +300,12 @@ public class AnagraficaCorsoManager extends StdManager<AnagraficaCorso> {
 			tx = session.beginTransaction(); 
 					
 			
-			String hql = "Select ac.idAnagrafica as extra, ac.nominativo as key, ac.scadenzaCertificato as value FROM AnagraficaCorso AS ac INNER JOIN Anagrafica as a ON a.id = ac.idAnagrafica WHERE ac.scadenzaCertificato >= :oggi AND ac.scadenzaCertificato <= :DataFine ORDER BY ac.scadenzaCertificato DESC";
+			String hql = "Select DISTINCT ac.idAnagrafica as extra, ac.nominativo as key, ac.scadenzaCertificato as value FROM AnagraficaCorso AS ac INNER JOIN Anagrafica as a ON a.id = ac.idAnagrafica WHERE ac.scadenzaCertificato >= :oggi AND ac.scadenzaCertificato <= :DataFine ORDER BY ac.scadenzaCertificato DESC";
 			Date oggi = StandardUtils.currentDateTime(),
 				 fine =  StandardUtils.sommaGiorni(oggi, 15);
 			oggi = StandardUtils.azzeraMinutiOreSecondi(oggi);
 			
 			Query query = session.createQuery(hql);
-			query.setMaxResults(1);
 			query.setParameter("oggi", oggi);
 			query.setParameter("DataFine", fine);
 			query.setResultTransformer(Transformers.aliasToBean(KeyValue.class));
