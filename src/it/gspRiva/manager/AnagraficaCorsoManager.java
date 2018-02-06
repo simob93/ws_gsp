@@ -3,7 +3,6 @@ package it.gspRiva.manager;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +15,7 @@ import javax.persistence.criteria.Root;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.hibernate.transform.Transformers;
 
 import it.gspRiva.entity.Anagrafica;
 import it.gspRiva.entity.AnagraficaCorso;
@@ -288,58 +288,30 @@ public class AnagraficaCorsoManager extends StdManager<AnagraficaCorso> {
 		return data;
 	}
 
-	@SuppressWarnings({"rawtypes" })
-	public List<KeyValue<String, String, Integer>> checkCertificatiScaduti() {
+	@SuppressWarnings({"rawtypes", "deprecation" })
+	public List<KeyValue> checkCertificatiScaduti() {
 		Session session = null;
 		Transaction tx = null;
-		List<KeyValue<String, String, Integer>> data = new ArrayList<KeyValue<String, String, Integer>>();
+		List<KeyValue> result = null;
+
 		try {
 			
 			session = HibernateUtils.getSessionAnnotationFactory().openSession();
 			tx = session.beginTransaction(); 
+					
 			
-			
-			/*CriteriaBuilder builder = session.getCriteriaBuilder();
-			CriteriaQuery<AnagraficaCorso> query = builder.createQuery(AnagraficaCorso.class);
-			
-			Root<AnagraficaCorso> anagraficaCorso = query.from(AnagraficaCorso.class);
-			query.select(anagraficaCorso);
-			
-			query.where(
-				builder.lessThanOrEqualTo(anagraficaCorso.get("scadenzaCertificato"), oggi)
-			);
-			query.orderBy(builder.desc(anagraficaCorso.get("scadenzaCertificato")));
-			
-			query.groupBy(anagraficaCorso.get("idAnagrafica"));
-			
-			builder.max(anagraficaCorso.get("scadenzaCertificato"));
-			
-			anagCorso =  session.createQuery(query).getResultList();*/
-			
-			
-			
-			String hql = "Select ac.idAnagrafica, ac.nominativo, MAX(ac.scadenzaCertificato) as dataScadenza FROM AnagraficaCorso AS ac INNER JOIN Anagrafica as a ON a.id = ac.idAnagrafica WHERE ac.scadenzaCertificato > :oggi AND ac.scadenzaCertificato <= :DataFine   GROUP BY ac.idAnagrafica";
+			String hql = "Select ac.idAnagrafica as extra, ac.nominativo as key, ac.scadenzaCertificato as value FROM AnagraficaCorso AS ac INNER JOIN Anagrafica as a ON a.id = ac.idAnagrafica WHERE ac.scadenzaCertificato >= :oggi AND ac.scadenzaCertificato <= :DataFine ORDER BY ac.scadenzaCertificato DESC";
 			Date oggi = StandardUtils.currentDateTime(),
 				 fine =  StandardUtils.sommaGiorni(oggi, 15);
 			oggi = StandardUtils.azzeraMinutiOreSecondi(oggi);
 			
 			Query query = session.createQuery(hql);
-			
+			query.setMaxResults(1);
 			query.setParameter("oggi", oggi);
 			query.setParameter("DataFine", fine);
-			List result = query.list();
+			query.setResultTransformer(Transformers.aliasToBean(KeyValue.class));
+			result = query.list();
 			tx.commit();			
-			for (int i =0; i< result.size(); i++) {
-				KeyValue<String, String, Integer>  cbox = new KeyValue<String, String, Integer>(); 
-				Object [] obj = (Object[]) result.get(i);
-				String nome = obj[1].toString();
-				String dataScadenza = obj[2].toString();
-				Integer idAnagrafica = (Integer) obj[0];
-				cbox.setKey(nome);
-				cbox.setValue(dataScadenza);
-				cbox.setExtra(idAnagrafica);
-				data.add(cbox);
-			}
 		
 		} catch (Exception e) {
 			tx.rollback();
@@ -350,6 +322,6 @@ public class AnagraficaCorsoManager extends StdManager<AnagraficaCorso> {
 				session.close();
 			}
 		}
-		return data;
+		return result;
 	}
 }

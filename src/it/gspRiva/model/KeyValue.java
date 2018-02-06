@@ -13,8 +13,14 @@ public class KeyValue<T1, T2, T> {
 	
 	public KeyValue() {}
 	
-	@JsonCreator
-	public KeyValue(@JsonProperty("key") T1 key, @JsonProperty("value") T2 value, @JsonProperty("extra") T extra) {
+//	@JsonCreator
+//	public KeyValue(@JsonProperty("key") T1 key, @JsonProperty("value") T2 value, @JsonProperty("extra") T extra) {
+//		this.key = key;
+//		this.value = value;
+//		this.extra = extra;
+//	}
+	
+	public KeyValue(T1 key, T2 value, T extra) {
 		this.key = key;
 		this.value = value;
 		this.extra = extra;

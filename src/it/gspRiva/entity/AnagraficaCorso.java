@@ -93,6 +93,7 @@ public class AnagraficaCorso extends EntityBase implements Serializable {
 	private Date dataFine;
 	
 	@Column(name="SCADENZACERTIFICATO")
+	@Type(type="date")
 	private Date scadenzaCertificato;
 	
 	@Column(name="NOTE")

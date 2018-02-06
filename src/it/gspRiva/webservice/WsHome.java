@@ -31,7 +31,7 @@ private  AnagraficaCorsoService anagraficaCorsoService;
 	@GET
 	@Path("/certificatiScaduti/src")
 	@Produces(MediaType.APPLICATION_JSON)
-	public JsonResponse<List<KeyValue<String, String, Integer>>> src() throws IOException {
+	public JsonResponse<List<KeyValue>> src() throws IOException {
 		return anagraficaCorsoService.checkCertificatiScaduti();
 	}
 }

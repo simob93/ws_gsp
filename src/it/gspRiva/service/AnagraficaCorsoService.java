@@ -89,10 +89,11 @@ public class AnagraficaCorsoService {
 		return new JsonResponse<ModelCertificatoMedico>(success, msg, data);
 	}
 
-	public JsonResponse<List<KeyValue<String, String, Integer>>> checkCertificatiScaduti() {
+	@SuppressWarnings("rawtypes")
+	public JsonResponse<List<KeyValue>> checkCertificatiScaduti() {
 		List<String> msg = new ArrayList<String>();
 		boolean success = true;
-		List<KeyValue<String, String, Integer>> data = null;
+		List<KeyValue> data = null;
 		try {
 			data = this.getManager().checkCertificatiScaduti();
 			msg.add(PropertiesFile.openPropertie().getProperty("operation.success"));
@@ -102,7 +103,7 @@ public class AnagraficaCorsoService {
 			e.printStackTrace();
 			msg.add(MessageFormat.format(PropertiesFile.openPropertie().getProperty("operation.error"), e.getMessage()));
 		}
-		return new JsonResponse<List<KeyValue<String, String, Integer>>>(success, msg, data);
+		return new JsonResponse<List<KeyValue>>(success, msg, data);
 	}
 	
 }
