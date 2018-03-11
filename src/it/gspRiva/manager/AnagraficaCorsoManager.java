@@ -2,7 +2,6 @@ package it.gspRiva.manager;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +16,6 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.hibernate.transform.Transformers;
 
-import it.gspRiva.entity.Anagrafica;
 import it.gspRiva.entity.AnagraficaCorso;
 import it.gspRiva.exception.MyException;
 import it.gspRiva.model.Iscritti;
@@ -126,7 +124,7 @@ public class AnagraficaCorsoManager extends StdManager<AnagraficaCorso> {
 			   .append("ac.data as dataIscrizione, ac.assicurazione as assicurazione, ac.idAnagrafica as idAnagrafica, ")
 			   .append("ac.lunedi as lunedi, ac.martedi as martedi, ac.mercoledi as mercoledi, ac.giovedi as giovedi, ac.venerdi as venerdi,")
 			   .append("ac.sabato as sabato, ac.personalizzato as personalizzato, ac.minutiLezioni as minutiLezioni, ac.numeroLezioni as numeroLezioni,")
-			   .append("ac.tipologia as tipologia, ac.dataInizio as dataInizio, ac.dataFine as dataFine ")
+			   .append("ac.tipologia as tipologia, ac.dataInizio as dataInizio, ac.dataFine as dataFine, ac.id as idAnagraficaCorso ")
 			   .append(" FROM AnagraficaCorso As ac INNER JOIN Anagrafica AS an ON ac.idAnagrafica = an.id WHERE ")
 			   .append(" ac.deletedData is null ")
 			   .append(" AND (ac.inserito is null OR ac.inserito='F') AND ac.tipologia=:tipologia ");

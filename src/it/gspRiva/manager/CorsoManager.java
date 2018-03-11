@@ -171,6 +171,7 @@ public class CorsoManager extends StdManager<Corso> {
 			double totale = 0;
 			Set<IscrittoCorso> iscritti = null; 
 			for (Corso c : corsi) {
+				totale = 0;
 				GridListaCorsi gridListaCorsi = new GridListaCorsi(c);
 				iscritti = c.getIscrittoCorso();
 				if ( iscritti != null && iscritti.size() > 0) {
